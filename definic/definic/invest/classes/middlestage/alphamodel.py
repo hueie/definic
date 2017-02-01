@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 #from ..common.dbhandler import DBHandler
+#from ..common.const import *
+from . import predictor
 
 import sys,os
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
 from common.dbhandler import DBHandler
 from common.const import *
-import copy
+
 import numpy as np
 import pandas as pd
 import statsmodels.tsa.stattools as ts
@@ -14,22 +16,23 @@ import statsmodels.tsa.stattools as ts
 class AlphaModel():
     def __init__(self):
         self.dbhandler = DBHandler()
-        self.window_size = 3 # Alpha Constant
-        self.threshold = 1.5 # Alpha Constant
         
     def determinePosition(self,code,df,column,row_index,verbose=False):
         pass
 
 
-
 class MeanReversionModel(AlphaModel):
+    def __init__(self):
+        AlphaModel.__init__(self)
+        self.window_size = 3 # Alpha Constant
+        self.threshold = 1.5 # Alpha Constant
+    
     def calcADF(self,df):
         adf_result = ts.adfuller(df)
         ciritical_values = adf_result[4]
         print(ciritical_values)
 
         return adf_result[0], ciritical_values['1%'],ciritical_values['5%'], ciritical_values['10%']
-
 
     def calcHurstExponent(self,df,lags_count=100):
         if lags_count <= 3 or len(df) < lags_count :
@@ -41,7 +44,6 @@ class MeanReversionModel(AlphaModel):
         tau = [np.sqrt(np.std(np.subtract(ts[lag:], ts[:-lag]))) for lag in lags]
         poly = np.polyfit(np.log(lags), np.log(tau), 1)
         result = poly[0]*2.0
-
         return result
 
     def calcHalfLife(self,df):
@@ -80,11 +82,15 @@ class MeanReversionModel(AlphaModel):
 
 '''
 class MachineLearningModel(AlphaModel):
-    def calcScore(self,split_ratio=0.75,time_lags=10):
+    def __init__ (self):
+        AlphaModel.__init__(self)
+        self.predictor = Predictor()
+    
+    def calcScore(self, split_ratio=0.75,time_lags=10):
         return self.predictor.trainAll(split_ratio=split_ratio,time_lags=time_lags )
 
 
-    def determinePosition(self,code,df,column,row_index,verbose=False):
+    def determinePosition(self, code,df,column,row_index,verbose=False):
         if (row_index-1) < 0:
             return HOLD
 
