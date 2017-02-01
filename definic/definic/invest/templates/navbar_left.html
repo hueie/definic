@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<div class="navbar-default sidebar " role="navigation">
+	<div class="sidebar-nav navbar-collapse">
+		<ul class="nav" id="side-menu">
+			{% if mainmenu == "invest" %}
+				<li>
+					<a style="display:inline;">Invest</a>
+					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
+				</li>
+			{% elif mainmenu == "statistics" %}
+				<li>
+					<a style="display:inline;">Statistics</a>
+					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="/invest/statistics/lineargraph/">Linear Graph</a>
+				</li>	
+			{% elif mainmenu == "datascience" %}
+				<li>
+					<a style="display:inline;">Data Science</a>
+					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="/invest/datascience/machinelearning/">Machine Learning</a>
+				</li>
+        	{% elif mainmenu == "backstage" %}
+	        	<li>
+					<a style="display:inline;">Back Stage</a>
+					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="/invest/backstage/datawarehouse/">Data Warehouse</a>
+				</li>
+				<li>
+					<a href="/invest/backstage/backtester/" >Back Tester</a>
+				</li>
+        	{% endif %}
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,60 @@
+
+numpy.array vs standard array
+numpy is faster and more functional to calculate array numbers.
+
+numpy vs standard math library
+numpy is faster and more functional to calculate array numbers.
+
+
+http://stackoverflow.com/questions/111983/python-array-versus-numpy-array
+
+It all depends on what you plan to do with the array. If all you're doing is creating arrays of simple data types and doing I/O, the array module will do just fine.
+If, on the other hand, you want to do any kind of numerical calculations, the array module doesn't provide any help with that. NumPy (and SciPy) give you a wide variety of operations between arrays and special functions that are useful not only for scientific work but for things like advanced image manipulation or in general anything where you need to perform efficient calculations with large amounts of data.
+Numpy is also much more flexible, e.g. it supports arrays of any type of Python objects, and is also able to interact "natively" with your own objects if they conform to the array interface.
+
+
+1)
+How to install Python MySQLdb module using pip?
+pip install MySQL-python
+Note: Some dependencies might have to be in place when running the above command. Some hints on how to install these on various platforms:
+
+Ubuntu 14, Ubuntu 16, Debian 8.6 (jessie)
+
+sudo apt-get install python-pip python-dev libmysqlclient-dev
+Fedora 24:
+
+sudo dnf install python python-devel mysql-devel redhat-rpm-config gcc
+
+or Microsoft Visual C++ Build Tools
+http://landinghub.visualstudio.com/visual-cpp-build-tools
+
+
+
+for 64-bit windows
+install using wheel
+pip install wheel
+download from http://www.lfd.uci.edu/~gohlke/pythonlibs/#mysql-python
+
+In Current Prompt path
+For python 3.x:
+pip install mysqlclient-1.3.8-cp36-cp36m-win_amd64.whl
+For python 2.7:
+pip install mysqlclient-1.3.8-cp27-cp27m-win_amd64.whl
+http://stackoverflow.com/questions/26866147/mysql-python-install-fatal-error
+
+
+
+
+pip install requests
+
+BeautifulSoup : https://www.crummy.com/software/BeautifulSoup/
+pip install beautifulsoup4. In order to parse HTML Page
+
+
+
+#https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursor-execute.html
+
+
+
+POST
+https://www.reddit.com/r/django/comments/41kl0r/how_to_post_the_value_of_a_select_tag_to_django/

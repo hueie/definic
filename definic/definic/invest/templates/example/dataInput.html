@@ -1,0 +1,59 @@
+{%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%}
+
+{%@ page import="java.sql.*"%}
+{%@ include file="/dbconf.jsp"%}
+
+{%
+request.setCharacterEncoding("UTF-8");
+String user_email = (String)session.getAttribute("signedUserEmail");
+
+String bloodSugarLevel = request.getParameter("bloodSugarLevel");
+String checkTime = request.getParameter("checkTime");
+String dataDate = request.getParameter("dataDate");
+System.out.println(dataDate +" "+checkTime + " " + bloodSugarLevel);
+%}
+
+{%
+Connection conn = null;
+Statement stmt = null;
+try {
+	
+	Class.forName("com.mysql.jdbc.Driver").newInstance();
+	conn = DriverManager.getConnection(url,id,pw);
+	stmt = conn.createStatement();
+
+	String sql = "";
+	sql = "select count(*) from huetap_calendar where reg_dt='"+dataDate+"' and  kindId = 2;";
+	
+	int userCount = 0;
+	ResultSet rslt = stmt.executeQuery(sql);
+	while(rslt.next()){
+		userCount = rslt.getInt(1);
+	}
+	rslt.close();
+
+	if(userCount!=0){ //Update
+		sql = "update huetap_calendar set info_"+checkTime+" = '"+bloodSugarLevel+"' where reg_dt='"+dataDate+"' and  kindId = 2 and user_email='"+user_email+"';";
+	} else {	//insert
+		sql = "insert into huetap_calendar(info_"+checkTime+", reg_dt, kindId, user_email) values('"+bloodSugarLevel+"', '"+dataDate+"', 2, '"+user_email+"');";
+	}
+	stmt.execute(sql);
+	
+} catch (ClassNotFoundException e){
+	e.printStackTrace();
+} catch (SQLException e){
+	e.printStackTrace();
+} finally {
+	try{
+		if(conn != null && !conn.isClosed())
+			conn.close();
+	} catch (SQLException e){
+		e.printStackTrace();
+	}
+}
+
+response.sendRedirect("../index.jsp"); //redirect do not include request set
+
+
+%}

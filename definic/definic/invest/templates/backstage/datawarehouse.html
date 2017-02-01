@@ -1,0 +1,41 @@
+{% load staticfiles %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">{{ maintitle }}</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		{{ subtitle }} <br>
+		<form action="/invest/backstage/datawarehouse/update/" method="get" name="dataupdate">
+			<span>Stock Code : </span>
+			<input type="text" name="pStockcode" value="{{ pStockCode }}" style="color:black;">
+			<span>Start Date : </span>
+			<input type="text" name="pStart" value="{{ pStart }}" style="color:black;">
+			<span>End Date : </span>
+			<input type="text" name="pEnd" value="{{ pEnd }}" style="color:black;">
+			<input type="submit" style="color:black;" value="submit">
+		</form>
+		<br>
+		<table style="width:100%;border:solid 1px white;" >
+			<tr>
+				<td style="width:10%"> Stock Code </td>
+				<td style="width:30%"> Start Date </td>
+				<td style="width:30%"> End Date </td>
+				<td style="width:30%"> Last Update Date </td>
+			</tr>
+			{% for row in rsltlst %}
+			<tr>
+				<td> {{ row.stock_code }} </td>
+				<td> {{ row.start }} </td>
+				<td> {{ row.end }} </td>
+				<td> {{ row.lst_reg_dt }} </td>
+			</tr>
+			{% endfor %}
+		</table>	
+			
+	</div>
+</div>
+
