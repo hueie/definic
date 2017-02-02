@@ -115,6 +115,62 @@ class MachineLearningModel(AlphaModel):
             return SHORT
 '''
    
+    def trainAll(self, time_lags=5, split_ratio=0.75):
+        rows_code = self.dbreader.loadCodes(self.config.get('data_limit'))
+        
+        test_result = {'code':[], 'company':[], 'logistic':[], 'rf':[], 'svm':[]}
+
+        index = 1
+        for a_row_code in rows_code:
+            code = a_row_code[0]
+            company = a_row_code[1]
+            
+            print("... %s of %s : Training Machine Learning on %s %s" % (index,len(rows_code),code,company))
+
+            df_dataset = self.makeLaggedDataset(code,self.config.get('start_date'),self.config.get('end_date'), self.config.get('input_column'),self.config.get('output_column'),time_lags=time_lags)
+
+            #print df_dataset
+
+            if df_dataset.shape[0]>0:
+                
+                test_result['code'].append(code)
+                test_result['company'].append(company)
+
+                #print df_dataset
+
+                X_train,X_test,Y_train,Y_test = self.splitDataset(df_dataset,'price_date',[self.config.get('input_column')],self.config.get('output_column'),split_ratio)
+
+                #print X_test, Y_test
+
+                for a_clasifier in ['logistic','rf','svm']:
+                    predictor = self.createPredictor(a_clasifier)
+                    self.add(code,a_clasifier,predictor)
+
+                    predictor.train(X_train,Y_train)
+                    score = predictor.score(X_test,Y_test)
+
+                    test_result[a_clasifier].append(score)
+
+                    print("    predictor=%s, score=%s" % (a_clasifier,score))
+
+
+                #print test_result
+
+            index += 1
+
+        df_result = pd.DataFrame(test_result)
+
+        return df_result
+
+
+    def dump(self):
+        for a_code in self.items.keys():
+            for a_predictor in self.items[a_code].keys():
+                print("... code=%s , predictor=%s" % (a_code,a_predictor))
+
+
+
+   
 if __name__ == "__main__":
     alphamodel = MeanReversionModel()
     
