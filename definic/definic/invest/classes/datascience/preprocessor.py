@@ -12,32 +12,6 @@ class Preprocessor():
         pass
     
     def makeDataSet(self, start_date, end_date):
-        trainToTest_Ratio = 2/3 
-        train_x_arr = [] ; train_y_arr = []
-        test_x_arr = [] ; test_y_arr = [] ; test_date_arr = []
-        all_x_arr = [] ; all_date_arr = []
-        
-        tmpdata = copy.deepcopy(data)
-        datalen = len(list(tmpdata))
-
-        idx = 0
-        for row in data:
-            if idx < datalen*trainToTest_Ratio :
-                train_x_arr.append([idx])
-                train_y_arr.append( float(row['close']) )
-            else :
-                test_x_arr.append([idx])
-                test_date_arr.append( str(row['date']) )
-                test_y_arr.append( float(row['close']) )
-            all_x_arr.append([idx])
-            all_date_arr.append(str(row['date']))
-            idx += 1
-        print(train_x_arr) ; print(train_y_arr)
-        print(test_x_arr) ; print(test_y_arr)
-        
-        data_X_train = np.array(train_x_arr) # [ val_1, val_2, ... ] multiple variables in X independent data array.
-        data_y_train = np.array(train_y_arr)
-        
         pass
 
     def makeLaggedDataset(self, start_date, end_date, input_column, output_column, time_lags=5):
