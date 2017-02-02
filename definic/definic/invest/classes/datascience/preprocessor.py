@@ -1,20 +1,47 @@
-
-import sys,os
+# -*- coding: utf-8 -*-
+import sys,os, copy
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
 from common.dbhandler import DBHandler
 from common.const import *
 from common.commonutil import CommonUtil
+import numpy as np
 
 
 class Preprocessor():
     def __init__(self):
         pass
     
-    def makeDataSet(self,code,start_date,end_date):
+    def makeDataSet(self, start_date, end_date):
+        trainToTest_Ratio = 2/3 
+        train_x_arr = [] ; train_y_arr = []
+        test_x_arr = [] ; test_y_arr = [] ; test_date_arr = []
+        all_x_arr = [] ; all_date_arr = []
+        
+        tmpdata = copy.deepcopy(data)
+        datalen = len(list(tmpdata))
+
+        idx = 0
+        for row in data:
+            if idx < datalen*trainToTest_Ratio :
+                train_x_arr.append([idx])
+                train_y_arr.append( float(row['close']) )
+            else :
+                test_x_arr.append([idx])
+                test_date_arr.append( str(row['date']) )
+                test_y_arr.append( float(row['close']) )
+            all_x_arr.append([idx])
+            all_date_arr.append(str(row['date']))
+            idx += 1
+        print(train_x_arr) ; print(train_y_arr)
+        print(test_x_arr) ; print(test_y_arr)
+        
+        data_X_train = np.array(train_x_arr) # [ val_1, val_2, ... ] multiple variables in X independent data array.
+        data_y_train = np.array(train_y_arr)
+        
         pass
 
-    def makeLaggedDataset(self, code,start_date,end_date, input_column, output_column, time_lags=5):
-        df = self.makeDataSet(code,start_date,end_date)
+    def makeLaggedDataset(self, start_date, end_date, input_column, output_column, time_lags=5):
+        df = self.makeDataSet(start_date, end_date)
 
         df_lag = df
         df_lag[input_column] = df[input_column]
@@ -34,23 +61,16 @@ class Preprocessor():
         return df_lag.dropna(how='any').reset_index()
 
 
-    def splitDataset(self, df, date_column,input_column_array,output_column,split_ratio):
-        first_date,last_date = df.loc[0,date_column], df.loc[df.shape[0]-1, date_column]
-        commonutil = CommonUtil()
-        split_date = commonutil.getDateByPerent(first_date,last_date,split_ratio)
-
-        #print "splitDataset : date=%s" % (split_date)
-
-        input_data = df[input_column_array]
-        output_data = df[output_column]
-
-        # Create training and test sets
-        X_train = input_data[df[date_column] < split_date]
-        X_test = input_data[df[date_column] >= split_date]
-        Y_train = output_data[df[date_column] < split_date]
-        Y_test = output_data[df[date_column] >= split_date]
-
-        return X_train,X_test,Y_train,Y_test
+    def splitDataset(self, df, split_ratio):
+        split_index = len(df)*split_ratio
+        #print("splitDataset : date=%s" % (split_index))
+        train = df[df.index < split_index]
+        test = df[df.index >= split_index]
+        #print(train) ; print('slice') ; print(test)
+        return train, test
 
 
+if __name__ == '__main__':
+    pass
+    
     

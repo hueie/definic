@@ -98,7 +98,7 @@ class CommonUtil():
 		days = (end_date - start_date).days
 		target_days = numpy.trunc(days * percent)
 		target_date = start_date + timedelta(days=target_days)
-		#print days, target_days,target_date
+		print(days, target_days,target_date)
 		return target_date
 	
 	

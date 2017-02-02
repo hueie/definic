@@ -178,8 +178,8 @@ if __name__ == "__main__":
 
     df = pd.read_sql(sql, alphamodel.dbhandler.conn, index_col='date')
     df2 = pd.read_sql(sql, alphamodel.dbhandler.conn)
+
     x = alphamodel.calcHalfLife(np.array(df['close']))
-    
     y = alphamodel.calcHurstExponent(np.array(df['close']), 4)
     z = alphamodel.calcADF(np.array(df['close']))
     sign = alphamodel.determinePosition(np.array(df['close']), len(df2)-1 )

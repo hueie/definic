@@ -4,6 +4,7 @@ encoding//definic/invest/classes/backstage/not_backtester.py=utf-8
 encoding//definic/invest/classes/backstage/not_crawler.py=utf-8
 encoding//definic/invest/classes/common/commonutil.py=utf-8
 encoding//definic/invest/classes/common/dbhandler.py=utf-8
+encoding//definic/invest/classes/datascience/preprocessor.py=utf-8
 encoding//definic/invest/classes/datascience/regression.py=utf-8
 encoding//definic/invest/classes/middlestage/alphamodel.py=utf-8
 encoding//definic/invest/classes/statistics/lineargraph.py=utf-8
