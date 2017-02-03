@@ -9,8 +9,8 @@ import datetime
 import pandas as pd
 import pandas.io.data as webdata
 
-
-
+import quandl #pip install quandl
+import wbdata #pip install wbdata
 
 class DataWareHouse:
 	def	__init__(self, pdata=None):
@@ -119,7 +119,36 @@ class DataWareHouse:
 		fieldlist = ['stock_code']
 		return map((lambda x: dict(zip(fieldlist, x))), result)
 
+	
+	def	getQuandlDataFromWeb(self, pStockCode, pStart, pEnd ):
+		#https://www.quandl.com/data/EIA-U-S-Energy-Information-Administration-Data/documentation/documentation
+		self.stockcode = pStockCode
+		self.data =	quandl.get(self.stockcode, returns="numpy")
+		#mydata = quandl.get("FRED/GDP")
+		#mydata = quandl.get("EIA/PET_RWTC_D")
+		#mydata = quandl.get("EIA/PET_RWTC_D", returns="numpy")
+		#mydata = quandl.get(["NSE/OIL.1", "WIKI/AAPL.4"])
+		#mydata = quandl.get("WIKI/AAPL", rows=5)
+		#print(mydata)
+		self.data['Date'] = self.data.index.values
+		return self.data
 			
+	
+	def	getWBDataFromWeb(self, pStockCode, pStart, pEnd ):
+		#https://wbdata.readthedocs.io/en/latest/
+		wbdata.get_source()
+		wbdata.get_indicator(source=1)
+		wbdata.search_countries("united")
+		date = (datetime.datetime(2010, 1, 1), datetime.datetime(2011, 1, 1))
+		self.data = wbdata.get_data("IC.BUS.EASE.XQ", country=("USA", "GBR"), data_date=date)
+		for row in self.data:
+			print(row['country']['id'] , row)
+			#indicators = {"IC.BUS.EASE.XQ": "doing_business", "NY.GDP.PCAP.PP.KD": "gdppc"}
+			#df = wbdata.get_dataframe(indicators, country=countries, convert_date=True)
+			#df.describe()   		
+			
+		return self.data
+		
 '''
 if __name__ == "__main__":
 	datawarehouse = DataWareHouse()
