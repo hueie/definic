@@ -7,7 +7,7 @@ from common.commonutil import CommonUtil
 import numpy as np
 
 
-class Preprocessor():
+class Preprocessor:
     def __init__(self):
         pass
     
@@ -43,7 +43,9 @@ class Preprocessor():
         #print(train) ; print('slice') ; print(test)
         return train, test
 
-
+    def adjustSeasonalData(self, df):
+        pass
+    
 if __name__ == '__main__':
     pass
     

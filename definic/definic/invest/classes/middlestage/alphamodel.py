@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 #from ..common.dbhandler import DBHandler
 #from ..common.const import *
-from . import predictor
 
 import sys,os
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
 from common.dbhandler import DBHandler
 from common.const import *
+from datascience.regression import Regression, LinearRegressionModel, LogisticRegressionModel, RandomForestModel, SVCModel
+from datascience.preprocessor import Preprocessor
+from backstage.datawarehouse import DataWareHouse
 
 import numpy as np
 import pandas as pd
@@ -17,7 +19,7 @@ class AlphaModel():
     def __init__(self):
         self.dbhandler = DBHandler()
         
-    def determinePosition(self,code,df,column,row_index,verbose=False):
+    def determinePosition(self, x_train, y_train, x_test, verbose=False):
         pass
 
 
@@ -56,23 +58,22 @@ class MeanReversionModel(AlphaModel):
         return half_life
 
 
-    def determinePosition(self,df, chk_row_idx ,verbose=False):
-        priceSeries = pd.Series(df) 
-        current_price = priceSeries[chk_row_idx]
+    def determinePosition(self, x_train, y_train, x_test, verbose=False):
+        priceSeries = pd.Series(y_train) 
 
         df_moving_average = priceSeries.rolling(window=self.window_size).mean()
         df_moving_average_std = priceSeries.rolling(window=self.window_size).std()
 
-        moving_average = df_moving_average[chk_row_idx]
-        moving_average_std = df_moving_average_std[chk_row_idx]
+        moving_average = df_moving_average[len(priceSeries)-1]
+        moving_average_std = df_moving_average_std[len(priceSeries)-1]
 
-        price_arbitrage = float(current_price) - float(moving_average)
+        price_arbitrage = float(x_test) - float(moving_average)
 
         if verbose:
-            print("diff=%s, price=%s, moving_average=%s, moving_average_std=%s" % (price_arbitrage,current_price,moving_average,moving_average_std))
-
+            print("diff=%s, price=%s, moving_average=%s, moving_average_std=%s" % (price_arbitrage, x_test, moving_average, moving_average_std))
+            pass
+        
         if abs(price_arbitrage) > moving_average_std * self.threshold:
-            
             if np.sign(price_arbitrage)>0:
                 return SHORT
             else:
@@ -80,108 +81,68 @@ class MeanReversionModel(AlphaModel):
 
         return HOLD
 
-'''
 class MachineLearningModel(AlphaModel):
     def __init__ (self):
         AlphaModel.__init__(self)
-        self.predictor = Predictor()
-    
-    def calcScore(self, split_ratio=0.75,time_lags=10):
-        return self.predictor.trainAll(split_ratio=split_ratio,time_lags=time_lags )
+        pass
 
-
-    def determinePosition(self, code,df,column,row_index,verbose=False):
-        if (row_index-1) < 0:
+    def determinePosition(self, x_train, y_train, x_test, verbose=False):
+        if (len(x_test)-1) < 0:
             return HOLD
-
-        current_price = df.loc[row_index-1,column]
-
-        prediction_result = 0
-        for a_predictor in ['logistic','rf','svm']:
-            
-            predictor = self.predictor.get(code,a_predictor)
-            pred,pred_prob = predictor.predict([current_price])
-
-            print("predictor=%s, price=%s, pred=%s, pred_proba=%s" % (a_predictor,current_price,pred[0],pred_prob[0]))
-
-            prediction_result += pred[0]
-            print(prediction_result[a_predictor])
-
-        print("price=%s, pred_result=%s" % (current_price,prediction_result))
-
-        if prediction_result>1:
-            return LONG
-        else:
-            return SHORT
-'''
-   
-    def trainAll(self, time_lags=5, split_ratio=0.75):
-        rows_code = self.dbreader.loadCodes(self.config.get('data_limit'))
         
-        test_result = {'code':[], 'company':[], 'logistic':[], 'rf':[], 'svm':[]}
-
-        index = 1
-        for a_row_code in rows_code:
-            code = a_row_code[0]
-            company = a_row_code[1]
+        selectedRegressionList =  ['linear','logistic', 'randomforest','svc']
+        prediction_result = 0
+        for arr_regression in selectedRegressionList:
             
-            print("... %s of %s : Training Machine Learning on %s %s" % (index,len(rows_code),code,company))
+            regression = Regression()
+            if(arr_regression == 'linear'):
+                regression = LinearRegressionModel()
+            elif(arr_regression == 'logistic'):
+                regression = LogisticRegressionModel()
+            elif(arr_regression == 'randomforest'):
+                regression = RandomForestModel()
+            elif(arr_regression == 'svc'):
+                regression = SVCModel()
+            else:
+                pass
+            
+            regression.train(x_train, y_train)
+            y_predicted = regression.predict( x_test )
+            print("predictor=%s, x_test=%s, y_predicted=%s" % (arr_regression, x_test, y_predicted) )
+            prediction_result += y_predicted[0]
+            
+        
+        prediction_result /= len(selectedRegressionList)
+        print("price=%s, pred_result=%s" % (x_test, prediction_result))
 
-            df_dataset = self.makeLaggedDataset(code,self.config.get('start_date'),self.config.get('end_date'), self.config.get('input_column'),self.config.get('output_column'),time_lags=time_lags)
-
-            #print df_dataset
-
-            if df_dataset.shape[0]>0:
-                
-                test_result['code'].append(code)
-                test_result['company'].append(company)
-
-                #print df_dataset
-
-                X_train,X_test,Y_train,Y_test = self.splitDataset(df_dataset,'price_date',[self.config.get('input_column')],self.config.get('output_column'),split_ratio)
-
-                #print X_test, Y_test
-
-                for a_clasifier in ['logistic','rf','svm']:
-                    predictor = self.createPredictor(a_clasifier)
-                    self.add(code,a_clasifier,predictor)
-
-                    predictor.train(X_train,Y_train)
-                    score = predictor.score(X_test,Y_test)
-
-                    test_result[a_clasifier].append(score)
-
-                    print("    predictor=%s, score=%s" % (a_clasifier,score))
-
-
-                #print test_result
-
-            index += 1
-
-        df_result = pd.DataFrame(test_result)
-
-        return df_result
-
-
-    def dump(self):
-        for a_code in self.items.keys():
-            for a_predictor in self.items[a_code].keys():
-                print("... code=%s , predictor=%s" % (a_code,a_predictor))
-
-
+        if prediction_result - x_test > 0:
+            return LONG, prediction_result
+        elif prediction_result - x_test < 0:
+            return SHORT, prediction_result
+   
+        return HOLD, prediction_result
 
    
 if __name__ == "__main__":
+    datawarehouse = DataWareHouse()
+    data = datawarehouse.selectYahooDataFromDB("GOOG")
+    preprocessor = Preprocessor()
+    train, test = preprocessor.splitDataset(data, 0.9)
+    
+    x_train = np.array([ [row] for row in train['open'] ])
+    y_train = np.array(train['adj_close'])
+    
+    x_test = np.array([ [row] for row in test['open'] ])
+    y_test = np.array(test['adj_close'])
+    
     alphamodel = MeanReversionModel()
-    
-    sql = "SELECT date, close FROM definic.data_stock_usa WHERE stock_code = 'GOOG' order by date"
+    x = alphamodel.calcHalfLife(y_train)
+    y = alphamodel.calcHurstExponent(y_train, 4)
+    z = alphamodel.calcADF(y_train)
+    print(x, y, z)
+    print(alphamodel.determinePosition(x_train, y_train, x_test ))
 
-    df = pd.read_sql(sql, alphamodel.dbhandler.conn, index_col='date')
-    df2 = pd.read_sql(sql, alphamodel.dbhandler.conn)
-
-    x = alphamodel.calcHalfLife(np.array(df['close']))
-    y = alphamodel.calcHurstExponent(np.array(df['close']), 4)
-    z = alphamodel.calcADF(np.array(df['close']))
-    sign = alphamodel.determinePosition(np.array(df['close']), len(df2)-1 )
+    alphamodel2 = MachineLearningModel()
+    print( alphamodel2.determinePosition(x_train, y_train, x_test) )
     
-    print(x, y, z, sign)
+    pass
