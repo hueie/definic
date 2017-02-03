@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+
 import matplotlib.pyplot as plt
 from scipy.stats import randint as sp_randint
 
@@ -318,4 +318,3 @@ class MachineLearningBackTester(BaseBackTester):
 
 		a_predictor.doRandomSearch(X_train.values,Y_train.values,param_dist,20)
 		print sp_randint(1, 11)
-'''

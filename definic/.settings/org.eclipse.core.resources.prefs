@@ -7,6 +7,7 @@ encoding//definic/invest/classes/common/dbhandler.py=utf-8
 encoding//definic/invest/classes/datascience/preprocessor.py=utf-8
 encoding//definic/invest/classes/datascience/regression.py=utf-8
 encoding//definic/invest/classes/frontstage/portfoliobuilder.py=utf-8
+encoding//definic/invest/classes/frontstage/tradingsystem.py=utf-8
 encoding//definic/invest/classes/middlestage/alphamodel.py=utf-8
 encoding//definic/invest/classes/statistics/lineargraph.py=utf-8
 encoding//definic/invest/migrations/0007_regressionmodel.py=utf-8
