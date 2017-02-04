@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 import sys,os
+'''
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
 from common.dbhandler import DBHandler
+'''
 
-#from ..common.dbhandler import DBHandler
-#from ..common.commonutil import CommonUtil
+from ..common.dbhandler import DBHandler
+from ..common.commonutil import CommonUtil
 import datetime
 import pandas as pd
-import pandas.io.data as webdata
+import pandas_datareader.data as webdata
 
-import quandl #pip install quandl
-import wbdata #pip install wbdata
+import quandl 
+import wbdata
 
 class DataWareHouse:
 	def	__init__(self, pdata=None):
@@ -66,32 +68,12 @@ class DataWareHouse:
 		print(sql)
 		return sql	
 	
-	def	selectAllYahooDataFromDB(self ):
+	def	selectYahooPeriodDataFromDB(self):
 		sql = "SELECT stock_code, min(date) as start, max(date) as end, lst_reg_dt FROM definic.data_stock_usa group by stock_code"
-		try:
-			print(sql)
-			cursor = self.dbhandler.execSql(sql)
-		except Exception as error:
-			print(error)
-		
-		result = cursor.fetchall()
-		fieldlist = ['stock_code', 'start', 'end', 'lst_reg_dt']
-		return map((lambda x: dict(zip(fieldlist, x))), result)
+		return pd.read_sql(sql, self.dbhandler.conn)
 
 	def selectYahooDataFromDB(self, stockcode ):
 		sql = "SELECT stock_code, date, lst_reg_dt, open, high, low, close, volume, adj_close FROM definic.data_stock_usa where stock_code ='%s' " % (stockcode)
-		'''
-		try:
-			print(sql)
-			cursor = self.dbhandler.execSql(sql)
-		except Exception as error:
-			print(error)
-
-		result = cursor.fetchall()
-		print(result)
-		fieldlist = ['stock_code', 'date', 'lst_reg_dt', 'open', 'high', 'low', 'close', 'volume', 'adj_close']
-		return map((lambda x: dict(zip(fieldlist, x))), result)
-		'''
 		return pd.read_sql(sql, self.dbhandler.conn)
 		
 
@@ -148,6 +130,22 @@ class DataWareHouse:
 			#df.describe()   		
 			
 		return self.data
+	
+	
+'''	
+	def	selectAllYahooDataFromDB(self ):
+		sql = "SELECT stock_code, min(date) as start, max(date) as end, lst_reg_dt FROM definic.data_stock_usa group by stock_code"
+		try:
+			print(sql)
+			cursor = self.dbhandler.execSql(sql)
+		except Exception as error:
+			print(error)
+		
+		result = cursor.fetchall()
+		fieldlist = ['stock_code', 'start', 'end', 'lst_reg_dt']
+		return map((lambda x: dict(zip(fieldlist, x))), result)
+'''
+	
 		
 '''
 if __name__ == "__main__":

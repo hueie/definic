@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from .classes.statistics.lineargraph import LinearGraph
-from .models_statistics import	LinearGraphModel
+from .lineargraph import LinearGraph
+from .statistics_models import	LinearGraphModel
+from .statistics_forms import LinearGraphForm
+
 from chartit import DataPool, Chart
 
-from .forms_statistics import LinearGraphForm
 	
 	
 def	lineargraph(request):

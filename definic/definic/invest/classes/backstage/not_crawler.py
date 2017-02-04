@@ -3,7 +3,7 @@
 from common import DBHandler
 from common import StockCode
 
-import pandas.io.data as web
+import pandas_datareader.data as web
 import requests
 from bs4 import BeautifulSoup
 import datetime

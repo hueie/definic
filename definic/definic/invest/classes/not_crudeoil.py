@@ -31,7 +31,7 @@ expect : dataframe
 """
 import numpy as	np
 import pandas as pd
-import pandas.io.data as webdata
+import pandas_datareader.data as webdata
 
 class Crudeoil:
 	def	__init__(self, pdata=None):

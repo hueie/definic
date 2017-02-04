@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 import sys,os
+'''
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
 from common.dbhandler import DBHandler
 from backstage.datawarehouse import DataWareHouse
 from datascience.preprocessor import Preprocessor
-#from ..common.dbhandler import DBHandler
-#from ..backstage.datawarehouse import DataWareHouse
+'''
+
+from ..common.dbhandler import DBHandler
+from ..backstage.datawarehouse import DataWareHouse
+from ..datascience.preprocessor import Preprocessor
 
 import copy
 import numpy as np

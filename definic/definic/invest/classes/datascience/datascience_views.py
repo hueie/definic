@@ -1,9 +1,13 @@
 from django.shortcuts import render
+from .datascience_forms import RegressionForm
+from .datascience_models import	RegressionModel
+
 from chartit import DataPool, Chart
-from .classes.datascience.regression import Regression
-from .models_datascience import	RegressionModel
-from .forms_datascience import RegressionForm
-import copy
+from .regression import LinearRegressionModel
+from .preprocessor import Preprocessor
+from ..backstage.datawarehouse import DataWareHouse
+import numpy as np
+import pandas as pd
 
 def	machinelearning(request):
 	mainmenu = "datascience"
@@ -17,12 +21,11 @@ def	machinelearning(request):
 def	regression(request):
 	mainmenu = "datascience" ; submenu = "regression"
 	maintitle="datascience" ; subtitle="regression"
-	
-	regression = Regression()
-	stockcodelst = regression.selectAllStockCodeFromDB()
-	stockcodetop = regression.selectTopStockCodeFromDB()
+
+	datawarehouse = DataWareHouse()
+	stockcodelst = datawarehouse.selectAllStockCodeFromDB()
+	stockcodetop = datawarehouse.selectTopStockCodeFromDB()
 	stock_code = (list(stockcodetop)[0])['stock_code']
-	print(stock_code)
 	
 	if request.method == 'GET':
 		form = RegressionForm(request.GET)
@@ -33,29 +36,45 @@ def	regression(request):
 	elif request.method == 'POST':
 		pass
 	
-	print(stock_code)
-	rsltlst = regression.selectYahooDataFromDB(stock_code)
-	predictedrsltlst = regression.linearregression(copy.deepcopy(rsltlst))
+	data = datawarehouse.selectYahooDataFromDB(stock_code)
+	preprocessor = Preprocessor()
+	train, test = preprocessor.splitDataset(data, 0.8)
+
+	x_train = np.array([ [row] for row in train['open'] ])
+	y_train = np.array(train['adj_close'])
+	x_test = np.array([ [row] for row in test['open'] ])
+	y_test = np.array(test['adj_close'])
+
+	linearregression = LinearRegressionModel()
+	print("Linear Regression Start")    
+	print("Train : ", linearregression.train( x_train, y_train))
+	y_pred = linearregression.predict( x_test)
+	print("Y_true : ", y_test)
+	print("Predicted : ", y_pred)
+	print("Score : ", linearregression.score(x_test, y_test))
+	print("Hit Ratio : ", linearregression.hitRatio(y_test, y_pred))
+	print("meanSquaredError : ", linearregression.meanSquaredError(y_test, y_pred))
+	test['predicted_data'] = pd.DataFrame(data=y_pred, index=test.index)
 	
 	RegressionModel.objects.all().delete()
 	if	RegressionModel.objects.count() == 0:
-		for	row in rsltlst:
+		for row_idx in range(data.shape[0]):
 			RegressionModel.objects.create(
-				Stock_code = row['stock_code'], 
-				Date = row['date'], 
-				Lst_reg_dt = row['lst_reg_dt'], 
-				Open = row['open'], 
-				High = row['high'], 
-				Low = row['low'], 
-				Close = row['close'], 
-				Volume = row['volume'],
-				Adj_Close = row['adj_close'],
-				Predicted_data = 0
+				Stock_code = data.loc[row_idx, 'stock_code'], 
+				Date = data.loc[row_idx, 'date'], 
+				Lst_reg_dt = data.loc[row_idx, 'lst_reg_dt'], 
+				Open = data.loc[row_idx, 'open'], 
+				High = data.loc[row_idx, 'high'], 
+				Low = data.loc[row_idx, 'low'], 
+				Close = data.loc[row_idx, 'close'], 
+				Volume = data.loc[row_idx, 'volume'],
+				Adj_Close = data.loc[row_idx, 'adj_close'],
+				Predicted_data = data.loc[row_idx, 'adj_close']
 				)
 	
-	for	row in predictedrsltlst:
-		rgmodel = RegressionModel.objects.get(Stock_code=stock_code,Date=row['date'])
-		rgmodel.Predicted_data = row['predicted_data']
+	for row_idx in range(test.shape[0]):
+		rgmodel = RegressionModel.objects.get(Stock_code=stock_code, Date= test.loc[row_idx, 'date'])
+		rgmodel.Predicted_data = test.loc[row_idx, 'predicted_data']
 		rgmodel.save()
 
 
@@ -77,8 +96,8 @@ def	regression(request):
 			[
 				{'options':{
 				  'type': 'line',
-	              'xAxis': 0,
-	              'yAxis': 0,
+	              #'xAxis': 0,
+	              #'yAxis': 0,
 	              'zIndex': 1},
 				'terms':{
 				  'Date': [
@@ -87,8 +106,8 @@ def	regression(request):
 				  }},
 				{'options':{
 				  'type': 'scatter',
-	              'xAxis': 0,
-	              'yAxis': 0,
+	              #'xAxis': 0,
+	              #'yAxis': 0,
 	              'zIndex': 0},
 				'terms':{
 				  'Date': [

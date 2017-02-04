@@ -1,18 +1,21 @@
 from django.conf.urls import url
 from . import views
-from . import views_statistics
-from . import views_datascience
-from . import views_backstage
+from .classes.statistics import statistics_views
+from .classes.datascience import datascience_views
+from .classes.backstage import backstage_views
+from .classes.middlestage import middlestage_views
 
 
 urlpatterns	= [
 	url(r'^$', views.index,	name='index'), 
-	url(r'^statistics/lineargraph/$', views_statistics.lineargraph,	name='lineargraph'), 
+	url(r'^statistics/lineargraph/$', statistics_views.lineargraph,	name='lineargraph'), 
 	
-	url(r'^datascience/machinelearning/$', views_datascience.machinelearning,	name='machinelearning'), 
-	url(r'^datascience/regression/$', views_datascience.regression,	name='regression'), 
+	url(r'^datascience/machinelearning/$', datascience_views.machinelearning,	name='machinelearning'), 
+	url(r'^datascience/regression/$', datascience_views.regression,	name='regression'), 
 	
-	url(r'^backstage/datawarehouse/$', views_backstage.datawarehouse,	name='datawarehouse'), 
-	url(r'^backstage/datawarehouse/update/$', views_backstage.dataUpdate,	name='dataUpdate'), 
+	url(r'^backstage/datawarehouse/$', backstage_views.datawarehouse,	name='datawarehouse'), 
+	url(r'^backstage/datawarehouse/update/$', backstage_views.dataUpdate,	name='dataUpdate'), 
+	
+	url(r'^middlestage/alphamodel/$', middlestage_views.alphamodel,	name='alphamodel'), 
 	
 ]

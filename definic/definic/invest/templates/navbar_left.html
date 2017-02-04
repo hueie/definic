@@ -23,7 +23,11 @@
 				</li>
 				<li class="divider"></li>
 				<li>
-					<a href="/invest/datascience/machinelearning/">Machine Learning</a>
+					<a href="/invest/datascience/regression/">Regression</a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="/invest/datascience/preprocessor/">Preprocessor</a>
 				</li>
         	{% elif mainmenu == "backstage" %}
 	        	<li>
@@ -36,6 +40,15 @@
 				</li>
 				<li>
 					<a href="/invest/backstage/backtester/" >Back Tester</a>
+				</li>
+			{% elif mainmenu == "middlestage" %}
+	        	<li>
+					<a style="display:inline;">Middle Stage</a>
+					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="/invest/middlestage/alphamodel/">AlphaModel</a>
 				</li>
         	{% endif %}
 		</ul>

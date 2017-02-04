@@ -26,12 +26,12 @@
 				<td style="width:30%"> End Date </td>
 				<td style="width:30%"> Last Update Date </td>
 			</tr>
-			{% for row in rsltlst %}
+			{% for row in pDataWareHouseModel %}
 			<tr>
-				<td> {{ row.stock_code }} </td>
-				<td> {{ row.start }} </td>
-				<td> {{ row.end }} </td>
-				<td> {{ row.lst_reg_dt }} </td>
+				<td> {{ row.Stock_code }} </td>
+				<td> {{ row.Start }} </td>
+				<td> {{ row.End }} </td>
+				<td> {{ row.Lst_reg_dt }} </td>
 			</tr>
 			{% endfor %}
 		</table>	

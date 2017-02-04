@@ -58,3 +58,13 @@ pip install beautifulsoup4. In order to parse HTML Page
 
 POST
 https://www.reddit.com/r/django/comments/41kl0r/how_to_post_the_value_of_a_select_tag_to_django/
+
+
+
+import quandl #pip install quandl
+import wbdata #pip install wbdata
+
+
+
+
+

@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
-import sys,os, copy
+import sys,os
+'''
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
 from common.dbhandler import DBHandler
 from common.const import *
 from common.commonutil import CommonUtil
+'''
+from ..common.dbhandler import DBHandler
+from ..common.const import *
+from ..common.commonutil import CommonUtil
+
 import numpy as np
+import pandas as pd
 
 
 class Preprocessor:
@@ -35,12 +42,15 @@ class Preprocessor:
         return df_lag.dropna(how='any').reset_index()
 
 
-    def splitDataset(self, df, split_ratio):
-        split_index = len(df)*split_ratio
-        #print("splitDataset : date=%s" % (split_index))
+    def splitDataset(self, df, split_ratio, reindex=True):
+        split_index = len(df)*split_ratio # ; print("splitDataset : date=%s" % (split_index))
         train = df[df.index < split_index]
+        train = train.copy(deep=True)
         test = df[df.index >= split_index]
-        #print(train) ; print('slice') ; print(test)
+        test = test.copy(deep=True)
+        if reindex is True:
+            test = test.reset_index(drop=True)
+            
         return train, test
 
     def adjustSeasonalData(self, df):

@@ -1,17 +1,29 @@
 from django.shortcuts import render
-from .classes.backstage.datawarehouse import DataWareHouse
-from .forms_backstage import DataUpdateForm
+from .datawarehouse import DataWareHouse
+from .backstage_forms import DataUpdateForm
+from .backstage_models import DataWareHouseModel
 
 def	datawarehouse(request):
 	mainmenu = "backstage" ; submenu = "datawarehouse"
 	maintitle="backstage" ; subtitle="datawarehouse"
 	
 	datawarehouse = DataWareHouse()
-	rsltlst = datawarehouse.selectYahooDataFromDB()
+	rsltlst = datawarehouse.selectYahooPeriodDataFromDB()
 	
+	DataWareHouseModel.objects.all().delete()
+	if DataWareHouseModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			DataWareHouseModel.objects.create(
+				Stock_code= rsltlst.loc[row_idx, 'stock_code'],
+				Start= rsltlst.loc[row_idx, 'start'],
+				End= rsltlst.loc[row_idx, 'end'],
+				Lst_reg_dt= rsltlst.loc[row_idx, 'lst_reg_dt']
+				)
+		
+	pDataWareHouseModel = DataWareHouseModel.objects.all()
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'maintitle': maintitle, 'subtitle': subtitle,
-				'rsltlst': rsltlst,}
+				'pDataWareHouseModel': pDataWareHouseModel,}
 	return render(request, 'index.html', context)
 
 def	dataUpdate(request):
