@@ -75,6 +75,10 @@ class DataWareHouse:
 	def selectYahooDataFromDB(self, stockcode ):
 		sql = "SELECT stock_code, date, lst_reg_dt, open, high, low, close, volume, adj_close FROM definic.data_stock_usa where stock_code ='%s' " % (stockcode)
 		return pd.read_sql(sql, self.dbhandler.conn)
+	
+	def selectAllYahooDataFromDB(self ):
+		sql = "SELECT stock_code, date, lst_reg_dt, open, high, low, close, volume, adj_close FROM definic.data_stock_usa"
+		return pd.read_sql(sql, self.dbhandler.conn)
 		
 
 	def selectAllStockCodeFromDB(self ):

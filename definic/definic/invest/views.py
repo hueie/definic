@@ -1,10 +1,10 @@
 from django.shortcuts import render
 
 def	index(request):
-	mainmenu = "datascience"
-	submenu = "machinelearning"
-	maintitle="datascience"
-	subtitle="machinelearning"
+	mainmenu = "index"
+	submenu = "index"
+	maintitle="index"
+	subtitle="index"
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'maintitle': maintitle, 'subtitle': subtitle,}
 	

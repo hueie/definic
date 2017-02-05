@@ -41,20 +41,20 @@
 			</div>
         </nav>
         <div id="page-wrapper" class="page-leftbar-fadein">
-        	{% if mainmenu == "/invest/" %}
+        	{% if submenu == "index" %}
 	        	Index
         	{% elif submenu == "lineargraph"%}
 				{% include "statistics/lineargraph.html" %}
-        	{% elif submenu == "machinelearning"%}
-				{% include "datascience/machinelearning.html" %}
         	{% elif submenu == "regression"%}
 				{% include "datascience/regression.html" %}
         	{% elif submenu == "datawarehouse"%}
 				{% include "backstage/datawarehouse.html" %}
 			{% elif submenu == "alphamodel"%}
 				{% include "middlestage/alphamodel.html" %}	
+        	{% elif submenu == "portfoliobuilder"%}
+				{% include "frontstage/portfoliobuilder.html" %}	
         	{% else %}
-	        	{% include "oil/graph.html" %}
+	        	No Pages
         	{% endif %}
         </div>
         <!-- /#page-wrapper -->

@@ -1,8 +1,62 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+from ..common.const import *
+
+class PortfolioItem:
+    def __init__(self,model,code,row_index,position):
+        self.model = model
+        self.code = code
+        self.row_index = row_index
+        self.position = position
+
+    def setData(self,df):
+        self.df = df
 
 
-class MessTrader(BaseCollection):
+class TradingSystem():
+    def __init__(self):
+        self.items = {}
+
+    def clear(self):
+        self.items.clear()
+    
+    def count(self):
+        return len(self.items.key())
+
+    def countItem(self,column):
+        return len(self.items[column])
+
+
+    def find(self,column):
+        if self.items.has_key(column):
+            return self.items[column]
+        return None
+
+    def iterItems(self):
+        return self.items.iterItems()
+    
+    def setData(self,df):
+        self.df = df
+    
+    def findCode(self,model,code):
+        model = self.find(model)
+        if model is None:
+            return None
+
+        for a_item in self.items[model]:
+            if a_item.code == code:
+                return a_item
+
+        return None
+
+
+    def saveUniverse(self,column,model,stock_dict):
+        for key in stock_dict.keys():
+            self.add(column,model,key,stock_dict[key])
+            
+        pass
+
+    
     def setPortfolio(self, portfolio):
         self.portfolio = portfolio
 
@@ -10,7 +64,7 @@ class MessTrader(BaseCollection):
         if self.find(code) is None:
             self.items[code] = []
 
-        a_item = TradeItem(model,code,row_index,position)
+        a_item = PortfolioItem(model,code,row_index,position)
 
         self.items[code].append( a_item )
 
