@@ -10,7 +10,6 @@ import pandas as pd
 
 def	alphamodel(request):
 	mainmenu = "middlestage" ; submenu = "alphamodel"
-	maintitle="middlestage" ; subtitle="alphamodel"
 
 	datawarehouse = DataWareHouse()
 	stock_code = "GOOG"
@@ -46,6 +45,5 @@ def	alphamodel(request):
 	
 	pAlphaModelModel = AlphaModelModel.objects.all()
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'maintitle': maintitle, 'subtitle': subtitle,
 				'pAlphaModelModel': pAlphaModelModel,}
 	return render(request, 'index.html', context)

@@ -32,21 +32,23 @@
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/invest/">Definic</a>
-                <a id="leftbarfadein" style="display:none;"class="navbar-brand" href="javascript:leftbarfadein();"><i class="fa fa-bars"></i></a>
+                <a id="leftbarfadein" style="display:inline;"class="navbar-brand" href="javascript:leftbarfadein();"><i class="fa fa-bars"></i></a>
             </div>
             {% include "navbar_top.html" %}
 
-			<div id="leftbar" class="leftbar leftbar-fadein">
+			<div id="leftbar" class="leftbar leftbar-fadeout">
 			{% include "navbar_left.html" %}
 			</div>
         </nav>
-        <div id="page-wrapper" class="page-leftbar-fadein">
+        <div id="page-wrapper" class="page-leftbar-fadeout">
         	{% if submenu == "index" %}
 	        	Index
         	{% elif submenu == "lineargraph"%}
 				{% include "statistics/lineargraph.html" %}
         	{% elif submenu == "regression"%}
 				{% include "datascience/regression.html" %}
+        	{% elif submenu == "preprocessor"%}
+				{% include "datascience/preprocessor.html" %}
         	{% elif submenu == "datawarehouse"%}
 				{% include "backstage/datawarehouse.html" %}
 			{% elif submenu == "alphamodel"%}

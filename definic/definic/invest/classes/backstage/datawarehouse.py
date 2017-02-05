@@ -83,16 +83,8 @@ class DataWareHouse:
 
 	def selectAllStockCodeFromDB(self ):
 		sql = "SELECT stock_code FROM definic.data_stock_usa GROUP BY stock_code"
-		try:
-			print(sql)
-			cursor = self.dbhandler.execSql(sql)
-		except Exception as error:
-			print(error)
-
-		result = cursor.fetchall()
-		fieldlist = ['stock_code']
-		return map((lambda x: dict(zip(fieldlist, x))), result)
-
+		return pd.read_sql(sql, self.dbhandler.conn)
+		
 	def selectTopStockCodeFromDB(self ):
 		sql = "SELECT stock_code FROM definic.data_stock_usa GROUP BY stock_code LIMIT 1"
 		try:

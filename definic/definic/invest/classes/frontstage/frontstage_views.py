@@ -10,7 +10,6 @@ import pandas as pd
 
 def	portfoliobuilder(request):
 	mainmenu = "frontstage" ; submenu = "portfoliobuilder"
-	maintitle="frontstage" ; subtitle="portfoliobuilder"
 
 
 	datawarehouse = DataWareHouse()
@@ -45,6 +44,5 @@ def	portfoliobuilder(request):
 	pPortfolioBuilderModel = PortfolioBuilderModel.objects.all()
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'maintitle': maintitle, 'subtitle': subtitle,
 				'pPortfolioBuilderModel': pPortfolioBuilderModel,}
 	return render(request, 'index.html', context)

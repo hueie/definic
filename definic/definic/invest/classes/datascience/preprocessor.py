@@ -1,15 +1,5 @@
 # -*- coding: utf-8 -*-
 import sys,os
-'''
-sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
-from common.dbhandler import DBHandler
-from common.const import *
-from common.commonutil import CommonUtil
-'''
-from ..common.dbhandler import DBHandler
-from ..common.const import *
-from ..common.commonutil import CommonUtil
-
 import numpy as np
 import pandas as pd
 
@@ -18,9 +8,6 @@ class Preprocessor:
     def __init__(self):
         pass
     
-    def makeDataSet(self, start_date, end_date):
-        pass
-
     def makeLaggedDataset(self, start_date, end_date, input_column, output_column, time_lags=5):
         df = self.makeDataSet(start_date, end_date)
 

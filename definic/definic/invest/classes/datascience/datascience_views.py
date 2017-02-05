@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .datascience_forms import RegressionForm
-from .datascience_models import	RegressionModel
+from .datascience_forms import RegressionForm, PreprocessorForm
+from .datascience_models import	RegressionModel, PreprocessorModel
 
 from chartit import DataPool, Chart
 from .regression import LinearRegressionModel
@@ -9,18 +9,58 @@ from ..backstage.datawarehouse import DataWareHouse
 import numpy as np
 import pandas as pd
 
-def	machinelearning(request):
-	mainmenu = "datascience"
-	submenu = "machinelearning"
-	maintitle="datascience"
-	subtitle="machinelearning"
+def	preprocessor(request):
+	mainmenu = "datascience" ; submenu = "preprocessor"
+	
+	datawarehouse = DataWareHouse()
+	codelist = datawarehouse.selectAllStockCodeFromDB()
+	
+	stock_code = codelist.loc[0, 'stock_code']
+	split_ratio = 0.8
+	if request.method == 'GET':
+		form = PreprocessorForm(request.GET)
+		if form.is_valid():
+			pStock_Code = form.cleaned_data['pStock_code']
+			pSplit_ratio = form.cleaned_data['pSplit_ratio']
+			if(pStock_Code != ""):
+				stock_code = pStock_Code
+			if(pSplit_ratio != ""):
+				split_ratio = pSplit_ratio	
+	elif request.method == 'POST':
+		pass
+	
+	data = datawarehouse.selectYahooDataFromDB(stock_code)
+	preprocessor = Preprocessor()
+	train, test = preprocessor.splitDataset(data, split_ratio)
+	
+	PreprocessorModel.objects.all().delete()
+	if	PreprocessorModel.objects.count() == 0:
+		PreprocessorModel.objects.create(
+			stock_code = stock_code,
+			train = train, 
+			test = test, 
+			split_ratio = split_ratio
+			)
+		
+	pPreprocessorModel = PreprocessorModel.objects.get(stock_code = stock_code)
+	
+	pCodelist = np.array( codelist['stock_code'] )
+	'''	
+	tmp2 = [ [t] for t in tmp]
+	fieldlist = ['stock_code']
+	pCodelist = map((lambda x: dict(zip(fieldlist, x))), tmp2)
+	print(pCodelist)
+	for row in pCodelist:
+		print(row)
+	'''
+	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'maintitle': maintitle, 'subtitle': subtitle,}
+				'pCodelist' : pCodelist, 
+				'pPreprocessorModel' : pPreprocessorModel}
 	return render(request, 'index.html', context)
 
 def	regression(request):
 	mainmenu = "datascience" ; submenu = "regression"
-	maintitle="datascience" ; subtitle="regression"
 
 	datawarehouse = DataWareHouse()
 	stockcodelst = datawarehouse.selectAllStockCodeFromDB()
@@ -125,7 +165,6 @@ def	regression(request):
 		)
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'maintitle': maintitle, 'subtitle': subtitle,
 				'stock_code': stock_code,
 				'charts' : [cht1],
 				'stockcodelst':stockcodelst,}

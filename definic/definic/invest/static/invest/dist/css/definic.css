@@ -4,7 +4,15 @@
   azure	#F0FFFF	rgb(240,255,255)
   .nav / .navbar-brand
    */
-
+button,
+input,
+optgroup,
+select,
+textarea {
+  margin: 0;
+  font: inherit;
+  color: black;
+}
 body {
   color: white;
   background-color: #778899;

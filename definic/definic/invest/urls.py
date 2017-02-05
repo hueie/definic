@@ -11,8 +11,8 @@ urlpatterns	= [
 	url(r'^$', views.index,	name='index'), 
 	url(r'^statistics/lineargraph/$', statistics_views.lineargraph,	name='lineargraph'), 
 	
-	url(r'^datascience/machinelearning/$', datascience_views.machinelearning,	name='machinelearning'), 
 	url(r'^datascience/regression/$', datascience_views.regression,	name='regression'), 
+	url(r'^datascience/preprocessor/$', datascience_views.preprocessor,	name='preprocessor'), 
 	
 	url(r'^backstage/datawarehouse/$', backstage_views.datawarehouse,	name='datawarehouse'), 
 	url(r'^backstage/datawarehouse/update/$', backstage_views.dataUpdate,	name='dataUpdate'), 

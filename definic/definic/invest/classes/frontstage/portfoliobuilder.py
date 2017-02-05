@@ -6,7 +6,6 @@ from ..datascience.regression import Regression, LinearRegressionModel, Logistic
 from ..datascience.preprocessor import Preprocessor
 from ..backstage.datawarehouse import DataWareHouse
 from ..middlestage.alphamodel import MeanReversionModel, MachineLearningModel
-from .universemodel import UniverseModel 
 '''
 import sys,os
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
@@ -17,7 +16,6 @@ from datascience.regression import Regression, LinearRegressionModel, LogisticRe
 from datascience.preprocessor import Preprocessor
 from backstage.datawarehouse import DataWareHouse
 from middlestage.alphamodel import MeanReversionModel, MachineLearningModel
-from frontstage.universemodel import UniverseModel 
 '''
 import numpy as np
 import pandas as pd
@@ -236,12 +234,4 @@ if __name__ == "__main__":
     df_machine_rank = portfoliobuilder.rankMachineLearning(df_machine_result)
     machine_codes = portfoliobuilder.buildUniverse(df_machine_rank,'rank',0.8)
     print(machine_codes)
-    
-    universe = UniverseModel()
-    
-    universe.clear()
-    universe.saveUniverse('close','stationarity',stationarity_codes)
-    universe.saveUniverse('close','machine_learning',machine_codes)
-    universe.dump()
-    
     pass

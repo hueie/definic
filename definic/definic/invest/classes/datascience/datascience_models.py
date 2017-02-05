@@ -22,3 +22,14 @@ class RegressionModel(models.Model):
 		else:
 			super(RegressionModel, self).save(*args, **kwargs) # Call	the	"real" save() 
 	
+
+class PreprocessorModel(models.Model):
+	stock_code = models.CharField(max_length=100, default="")
+	train = models.CharField(max_length=100, default="")
+	test =	models.CharField(max_length=100, default="") 
+	split_ratio =	models.FloatField(max_length=100, default=0.0) 
+	
+	def	save(self, *args, **kwargs):
+		super(PreprocessorModel, self).save(*args, **kwargs) 
+
+

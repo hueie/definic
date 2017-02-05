@@ -9,7 +9,6 @@ from chartit import DataPool, Chart
 	
 def	lineargraph(request):
 	mainmenu = "statistics" ; submenu = "lineargraph"
-	maintitle="statistics" ; subtitle="lineargraph"
 
 	lineargraph = LinearGraph()
 	stockcodelst = lineargraph.selectAllStockCodeFromDB()
@@ -108,7 +107,6 @@ def	lineargraph(request):
 		)
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'maintitle': maintitle, 'subtitle': subtitle,
 				'stock_code': stock_code,
 				'charts' : [cht1, cht2],
 				'stockcodelst':stockcodelst,}

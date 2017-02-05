@@ -5,7 +5,6 @@ from .backstage_models import DataWareHouseModel
 
 def	datawarehouse(request):
 	mainmenu = "backstage" ; submenu = "datawarehouse"
-	maintitle="backstage" ; subtitle="datawarehouse"
 	
 	datawarehouse = DataWareHouse()
 	rsltlst = datawarehouse.selectYahooPeriodDataFromDB()
@@ -22,13 +21,11 @@ def	datawarehouse(request):
 		
 	pDataWareHouseModel = DataWareHouseModel.objects.all()
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'maintitle': maintitle, 'subtitle': subtitle,
 				'pDataWareHouseModel': pDataWareHouseModel,}
 	return render(request, 'index.html', context)
 
 def	dataUpdate(request):
 	mainmenu = "backstage" ; submenu = "datawarehouse"
-	maintitle="backstage" ; subtitle="datawarehouse"
 	pStockCode = "" ; pStart = "" ; pEnd = ""
 	datawarehouse = DataWareHouse()
 					
@@ -49,7 +46,6 @@ def	dataUpdate(request):
 	rsltlst = datawarehouse.selectYahooDataFromDB()
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'maintitle': maintitle, 'subtitle': subtitle,
 				'pStockCode':pStockCode,'pStart':pStart,'pEnd':pEnd,
 				'rsltlst':rsltlst,
 				}
