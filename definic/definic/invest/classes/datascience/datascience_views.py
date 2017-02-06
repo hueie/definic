@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from .datascience_forms import RegressionForm, PreprocessorForm
+from .datascience_forms import RegressionForm, PreprocessorForm, NeuralnetworkForm
 from .datascience_models import	RegressionModel, PreprocessorModel
 
 from chartit import DataPool, Chart
 from .regression import LinearRegressionModel
+from .neuralnetwork import MLPClassifierModel
+
 from .preprocessor import Preprocessor
 from ..backstage.datawarehouse import DataWareHouse
 import numpy as np
@@ -170,5 +172,49 @@ def	regression(request):
 				'pCodelist':pCodelist, 'pStock_code':stock_code,
 				'charts' : [cht1],
 				'pRegressionModel':pRegressionModel,
+				}
+	return render(request, 'index.html', context)
+
+def	neuralnetwork(request):
+	mainmenu = "datascience" ; submenu = "neuralnetwork"
+
+	datawarehouse = DataWareHouse()
+	codelist = datawarehouse.selectAllStockCodeFromDB()
+	stock_code = codelist.loc[0, 'stock_code']
+	
+	if request.method == 'GET':
+		form = NeuralnetworkForm(request.GET)
+		if form.is_valid():
+			pStockCode = form.cleaned_data['pStock_code']
+			if(pStockCode != ""):
+				stock_code = pStockCode
+	elif request.method == 'POST':
+		pass
+	
+	data = datawarehouse.selectYahooDataFromDB(stock_code)
+	preprocessor = Preprocessor()
+	train, test = preprocessor.splitDataset(data, 0.8)
+
+	x_train = np.array([ [row] for row in train['open'] ])
+	y_train = np.array(train['adj_close'])
+	x_test = np.array([ [row] for row in test['open'] ])
+	y_test = np.array(test['adj_close'])
+
+	mlpclassifiermodel = MLPClassifierModel()
+	fit = mlpclassifiermodel.train( x_train, y_train)
+	y_pred = mlpclassifiermodel.predict( x_test)
+	score = mlpclassifiermodel.score(x_test, y_test)
+	hitratio = mlpclassifiermodel.hitRatio(y_test, y_pred)
+	mse = mlpclassifiermodel.meanSquaredError(y_test, y_pred)
+	nodeshape = [mynode.shape for mynode in mlpclassifiermodel.model.coefs_] 
+	test['predicted_data'] = pd.DataFrame(data=y_pred, index=test.index)
+	
+	
+	pCodelist = np.array( codelist['stock_code'] )
+	context	= {'mainmenu': mainmenu, 'submenu': submenu,
+				'pCodelist':pCodelist, 'pStock_code':stock_code,
+				'train' : train, 'test' : test, 'fit': fit, 
+				'score': score, 'hitratio':hitratio,
+				'mse' : mse, 'nodeshape':nodeshape
 				}
 	return render(request, 'index.html', context)

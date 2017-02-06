@@ -12,6 +12,7 @@ urlpatterns	= [
 	url(r'^statistics/lineargraph/$', statistics_views.lineargraph,	name='lineargraph'), 
 	
 	url(r'^datascience/regression/$', datascience_views.regression,	name='regression'), 
+	url(r'^datascience/neuralnetwork/$', datascience_views.neuralnetwork,	name='neuralnetwork'), 
 	url(r'^datascience/preprocessor/$', datascience_views.preprocessor,	name='preprocessor'), 
 	
 	url(r'^backstage/datawarehouse/$', backstage_views.datawarehouse,	name='datawarehouse'), 

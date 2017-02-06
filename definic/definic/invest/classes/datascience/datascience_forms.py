@@ -1,5 +1,8 @@
 from django import forms
 
+class NeuralnetworkForm(forms.Form):
+    pStock_code = forms.CharField()
+
 class RegressionForm(forms.Form):
     pStock_code = forms.CharField()
 

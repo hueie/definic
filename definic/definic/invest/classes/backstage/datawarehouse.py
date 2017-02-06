@@ -85,19 +85,10 @@ class DataWareHouse:
 		sql = "SELECT stock_code FROM definic.data_stock_usa GROUP BY stock_code"
 		return pd.read_sql(sql, self.dbhandler.conn)
 		
-	def selectTopStockCodeFromDB(self ):
-		sql = "SELECT stock_code FROM definic.data_stock_usa GROUP BY stock_code LIMIT 1"
-		try:
-			print(sql)
-			cursor = self.dbhandler.execSql(sql)
-		except Exception as error:
-			print(error)
-
-		result = cursor.fetchall()
-		fieldlist = ['stock_code']
-		return map((lambda x: dict(zip(fieldlist, x))), result)
-
-	
+		
+		
+		
+		
 	def	getQuandlDataFromWeb(self, pStockCode, pStart, pEnd ):
 		#https://www.quandl.com/data/EIA-U-S-Energy-Information-Administration-Data/documentation/documentation
 		self.stockcode = pStockCode
