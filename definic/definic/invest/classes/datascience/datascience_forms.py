@@ -1,7 +1,7 @@
 from django import forms
 
 class RegressionForm(forms.Form):
-    pStockcode = forms.CharField()
+    pStock_code = forms.CharField()
 
 
 class PreprocessorForm(forms.Form):

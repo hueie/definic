@@ -18,10 +18,10 @@
 		<form action="/invest/datascience/regression/" method="get" name="regressionupdate" >
 			<span>Stock Code : </span>
 			
-			<select name="pStockcode" id="pStockcode">
-  				{% for row in stockcodelst%}
-  					<option value="{{ row.stock_code }}" {% if row.stock_code == stock_code %} selected="selected" {% endif %} >
-  					{{ row.stock_code }}</option>
+			<select name="pStock_code" id="pStock_code">
+  				{% for row in pCodelist %}
+  					<option value="{{ row }}" {% if row == pStock_code %} selected="selected" {% endif %} >
+  					{{ row }}</option>
   				{% endfor %}
 			</select>
 			<input type="submit" value="submit" >

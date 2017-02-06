@@ -14,8 +14,9 @@ def	preprocessor(request):
 	
 	datawarehouse = DataWareHouse()
 	codelist = datawarehouse.selectAllStockCodeFromDB()
-	
 	stock_code = codelist.loc[0, 'stock_code']
+	
+	
 	split_ratio = 0.8
 	if request.method == 'GET':
 		form = PreprocessorForm(request.GET)
@@ -63,14 +64,13 @@ def	regression(request):
 	mainmenu = "datascience" ; submenu = "regression"
 
 	datawarehouse = DataWareHouse()
-	stockcodelst = datawarehouse.selectAllStockCodeFromDB()
-	stockcodetop = datawarehouse.selectTopStockCodeFromDB()
-	stock_code = (list(stockcodetop)[0])['stock_code']
+	codelist = datawarehouse.selectAllStockCodeFromDB()
+	stock_code = codelist.loc[0, 'stock_code']
 	
 	if request.method == 'GET':
 		form = RegressionForm(request.GET)
 		if form.is_valid():
-			pStockCode = form.cleaned_data['pStockcode']
+			pStockCode = form.cleaned_data['pStock_code']
 			if(pStockCode != ""):
 				stock_code = pStockCode
 	elif request.method == 'POST':
@@ -164,8 +164,11 @@ def	regression(request):
 			x_sortf_mapf_mts = None
 		)
 	
+	pCodelist = np.array( codelist['stock_code'] )
+	pRegressionModel = RegressionModel.objects.all()
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'stock_code': stock_code,
+				'pCodelist':pCodelist, 'pStock_code':stock_code,
 				'charts' : [cht1],
-				'stockcodelst':stockcodelst,}
+				'pRegressionModel':pRegressionModel,
+				}
 	return render(request, 'index.html', context)
