@@ -9,6 +9,7 @@ from .classes.frontstage import frontstage_views
 
 urlpatterns	= [
 	url(r'^$', views.index,	name='index'), 
+	url(r'^statistics/descriptive/$', statistics_views.descriptive,	name='descriptive'), 
 	url(r'^statistics/lineargraph/$', statistics_views.lineargraph,	name='lineargraph'), 
 	
 	url(r'^datascience/regression/$', datascience_views.regression,	name='regression'), 

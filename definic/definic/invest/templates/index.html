@@ -43,6 +43,8 @@
         <div id="page-wrapper" class="page-leftbar-fadeout">
         	{% if submenu == "index" %}
 	        	Index
+        	{% elif submenu == "descriptive"%}
+				{% include "statistics/descriptive.html" %}
         	{% elif submenu == "lineargraph"%}
 				{% include "statistics/lineargraph.html" %}
         	{% elif submenu == "regression"%}
