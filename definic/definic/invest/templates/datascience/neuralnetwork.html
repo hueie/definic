@@ -8,7 +8,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<form action="/invest/middlestage/alphamodel/" method="get" >
+		<form action="/invest/datascience/neuralnetwork/" method="get" >
 			<span>Stock Code : </span>
 			
 			<select name="pStock_code" id="pStock_code">
@@ -23,23 +23,23 @@
 		<br>
 		<table style="width:100%;border:solid 1px white;" >
 			<tr>
-				<td style="width:10%"> Stock Code </td>
-				<td style="width:10%"> MR Position </td>
-				<td style="width:20%"> HalfLife </td>
-				<td style="width:20%"> Hurst Exponent </td>
-				<td style="width:20%"> ADF </td>
-				<td style="width:20%"> ML Position</td>
+				<td style="width:25%"> train </td>
+				<td style="width:25%"> test </td>
+				<td style="width:25%"> fit </td>
+				<td style="width:10%"> nodeshape </td>
+				<td style="width:5%"> score </td>
+				<td style="width:5%"> hitratio </td>
+				<td style="width:5%"> mse </td>
 			</tr>
-			{% for row in pAlphaModelModel %}
 			<tr>
-				<td> {{ row.stock_code }} </td>
-				<td> {{ row.mr_det_pos }} </td>
-				<td> {{ row.halflife }} </td>
-				<td> {{ row.hurstexponent }} </td>
-				<td> {{ row.adf }} </td>
-				<td> {{ row.ml_det_pos }} </td>
+				<td> {{ train }} </td>
+				<td> {{ test }} </td>
+				<td> {{ fit }} </td>
+				<td> {{ nodeshape }} </td>
+				<td> {{ score }} </td>
+				<td> {{ hitratio }} </td>
+				<td> {{ mse }} </td>
 			</tr>
-			{% endfor %}
 		</table>	
 			
 	</div>

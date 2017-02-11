@@ -22,7 +22,7 @@
 		<form action="/invest/statistics/lineargraph/" method="get" name="lineargraphupdate" >
 			<span>Stock Code : </span>
 			
-			<select name="pStockcode" id="pStockcode">
+			<select name="pStock_code" id="pStock_code">
   				{% for row in stockcodelst%}
   					<option value="{{ row.stock_code }}" {% if row.stock_code == stock_code %} selected="selected" {% endif %} >
   					{{ row.stock_code }}</option>

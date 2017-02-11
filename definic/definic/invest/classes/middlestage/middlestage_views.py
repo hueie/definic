@@ -3,6 +3,7 @@ from .middlestage_models import	AlphaModelModel
 
 from chartit import DataPool, Chart
 from .alphamodel import MeanReversionModel, MachineLearningModel
+from .middlestage_forms import AlphamodelForm
 from ..datascience.preprocessor import Preprocessor
 from ..backstage.datawarehouse import DataWareHouse
 import numpy as np
@@ -10,9 +11,23 @@ import pandas as pd
 
 def	alphamodel(request):
 	mainmenu = "middlestage" ; submenu = "alphamodel"
-
+	
 	datawarehouse = DataWareHouse()
-	stock_code = "GOOG"
+	codelist = datawarehouse.selectAllStockCodeFromDB()
+	stock_code = codelist.loc[0, 'stock_code']
+
+
+	if request.method == 'GET':
+		form = AlphamodelForm(request.GET)
+		if form.is_valid():
+			pStockCode = form.cleaned_data['pStock_code']
+			if(pStockCode != ""):
+				stock_code = pStockCode
+	elif request.method == 'POST':
+		pass
+
+
+
 	data = datawarehouse.selectYahooDataFromDB(stock_code)
 	preprocessor = Preprocessor()
 	train, test = preprocessor.splitDataset(data, 0.9)
@@ -43,7 +58,9 @@ def	alphamodel(request):
 			ml_det_pos = ml_det_pos
 			)
 	
+	pCodelist = np.array( codelist['stock_code'] )
 	pAlphaModelModel = AlphaModelModel.objects.all()
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
+				'pCodelist': pCodelist, 'pStock_code' : stock_code,
 				'pAlphaModelModel': pAlphaModelModel,}
 	return render(request, 'index.html', context)
