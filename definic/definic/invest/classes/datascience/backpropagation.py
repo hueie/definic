@@ -36,8 +36,8 @@ class Backpropagation:
         terminating_condition = False;
         
         while terminating_condition is not True:
-            for d_idx, row in enumerate(x_train):
-
+            for x_train_idx, row in enumerate(x_train):
+                print("\n!!! Start of %s x train : %s , y train : %s !!!\n" % (x_train_idx, row, y_train[x_train_idx]) ) 
                 print("\n!!! Start of Train Input and Output Calculations !!!\n")   
                 #!!! Start of Net Input and Output Calculations
                 O = np.array([0.0]*total_unit_cnt) # Must use 0.0 float
@@ -87,7 +87,7 @@ class Backpropagation:
                     
                     if (idx == 0): #Stating at Output layer
                         print("Error of Unit %s : " % (total_unit_cnt-1) )
-                        Err[-1] = O[-1] * (1 - O[-1]) * (y - O[-1])# compute the error
+                        Err[-1] = O[-1] * (1 - O[-1]) * ( y_train[x_train_idx] - O[-1] )# compute the error
                         print("\tError[%s] : %s" % (j_unit, Err[-1]) )
                         prev_layer_unit_cnt = current_layer_unit_cnt
                     
@@ -144,6 +144,7 @@ class Backpropagation:
                         prev_layer_unit_cnt = prev_layer_unit_cnt + current_layer_unit_cnt
                 
                 #!!! End of Adjusting Backpropagation Algorithm
+                print("\n!!! End of %s x train : %s , y train : %s !!!\n" % (x_train_idx, row, y_train[x_train_idx]) ) 
                 
                           
             print("\n!!! Start of Terminating condition !!!\n")
@@ -408,7 +409,19 @@ if __name__ == "__main__":
     #backpropagation.test_example()
     
     x1=1; x2=0; x3=1; y=1
-    x_train=[ [x1, x2, x3] ]
+    x_train=[]
+    y_train=[]
+    x_test=[[x1, x2, x3]]
+    
+    for idx in range(100):
+        x_train.append([x1, x2, x3])
+        y_train.append(y)
+        
+    print(x_train)
+    print(y_train)
+    
+    
+    
     w14=0.2; w15=-0.3; w24=0.4; w25=0.1; 
     w34=-0.5; w35=0.2; w46=-0.3; w56=-0.2
     b4=-0.4; b5=0.2; b6=0.1
@@ -422,8 +435,8 @@ if __name__ == "__main__":
     b = [0, 0, 0, b4, b5, b6]
     elu = [3, 2, 1]    
         
-    backpropagation.train(x_train, y, w, b, elu)
-    backpropagation.test(x_train)
+    backpropagation.train(x_train, y_train, w, b, elu)
+    backpropagation.test(x_test)
     
     pass
 
