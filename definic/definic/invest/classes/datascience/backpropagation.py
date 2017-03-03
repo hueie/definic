@@ -413,7 +413,7 @@ if __name__ == "__main__":
     y_train=[]
     x_test=[[x1, x2, x3]]
     
-    for idx in range(100):
+    for idx in range(120):
         x_train.append([x1, x2, x3])
         y_train.append(y)
         
@@ -437,6 +437,12 @@ if __name__ == "__main__":
         
     backpropagation.train(x_train, y_train, w, b, elu)
     backpropagation.test(x_test)
+    
+    print("Each Layer Unit : %s" % backpropagation.each_layer_unit)
+    print("Learning Rate : %s" % backpropagation.learning_rate)
+    print("Weight : %s" % backpropagation.weight)
+    print("Bias : %s" % backpropagation.bias)
+    
     
     pass
 
