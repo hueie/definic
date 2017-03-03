@@ -38,6 +38,12 @@ class Decisiontree:
                             
         print('final entropy :',ent,'bits')
         return ent
+    
+    def prepruning(self):
+        pass
+    
+    def postpruning(self):
+        pass
 
     
 class Id3(Decisiontree):
@@ -85,6 +91,26 @@ class Id3(Decisiontree):
             self.entropy(lst)
         '''
     
+class C45(Decisiontree):
+    def __init__(self):
+        Decisiontree.__init__(self)
+        gaindf = None
+        treecond = None
+        pass    
+    
+    def gainratio(self, df):
+        pass
+        
+
+class Cart(Decisiontree):
+    def __init__(self):
+        Decisiontree.__init__(self)
+        gaindf = None
+        treecond = None
+        pass    
+    
+    def giniindex(self, df):
+        pass
     
         
 if __name__ == "__main__":
