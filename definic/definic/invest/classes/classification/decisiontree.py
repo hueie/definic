@@ -36,7 +36,6 @@ class Decisiontree:
                 
                 ent += x_ratio * subent
                             
-        print('final entropy :',ent,'bits')
         return ent
     
     def prepruning(self):
@@ -57,8 +56,8 @@ class Id3(Decisiontree):
         #print(x_train)
         #print(y_train)
 
-        print('Gain_D')
         gain_d = self.entropy(y_train)
+        print("Gain_D : %s bits" % gain_d)
         
         gain_df = pd.DataFrame()
         for x_col in x_train:
@@ -67,7 +66,7 @@ class Id3(Decisiontree):
             gain_cond = gain_d - gain_sub
             gain_df[x_col] = pd.Series(gain_cond)
         
-        print('Gain_Dataframe')
+        print("Gain_Dataframe")
         print(gain_df)
         
         maxcolname = ''
@@ -77,14 +76,12 @@ class Id3(Decisiontree):
                 maxcolname = row
                 max = np.float(gain_df[row])
                 
-        print('max')
-        print(max)
+        print("max : %s" % max)
         
         self.gaindf = gain_df
         self.treecond = {maxcolname : max}
         return {maxcolname : max}
         
-        #return {maxcolname : max}
         '''
         for cols in x_train.columns:
             lst = np.array(train[cols])
