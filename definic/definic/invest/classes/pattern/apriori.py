@@ -21,80 +21,82 @@ class Apriori:
             
         self.min_sup = min_sup
         self.x_train = x_train
-        print("\n!!! Finish Initiating Constants !!!\n")
+        #print("\n!!! End of Initiating Constants !!!\n")
         
         x_train_arr = []
         for x_dict in x_train:
             #print(list(list(x_dict.values())[0]))
             x_train_arr = x_train_arr + list(list(x_dict.values())[0])
-            
         
         print(x_train_arr)
         x_train_cnts = Counter(x_train_arr)
         
-        
-        print("\n!!! Start of C1 Counter !!!\n")
-        C_cnts = dict()
-        for word, count in x_train_cnts.items():
-            C_cnts[frozenset({word})] = count
+        apriori_idx = 1
+        print("\n!!! Start of C%s Counter !!!\n" % apriori_idx)
+        C1 = dict()
+        for C1_word, C1_count in x_train_cnts.items():
+            C1[frozenset({C1_word})] = C1_count
             pass
 
-        basic_elements = list(C_cnts.keys())
-        print("\n!!! End of C1 Counter !!!\n")
-        
-        print("\n!!! Start of C1 Min Sup !!!\n")
-        L_cnts = copy.deepcopy(C_cnts)
+        basic_elements = list(C1.keys())
         print("basic_elements : ", basic_elements)
-        for C_word, C_count in C_cnts.items():
+        print("C%s : %s" % (apriori_idx , C1) ) 
+        print("\n!!! End of C%s Counter !!!\n" % apriori_idx)
+        
+        print("\n!!! Start of L%s Min Sup !!!\n" % apriori_idx)
+        L1 = copy.deepcopy(C1)
+        for C_word, C_count in C1.items():
             if(C_count < min_sup):
-                L_cnts.pop(C_word)
+                L1.pop(C_word)
         
-        print(L_cnts)  
-        print(set(L_cnts.keys()))
-        print("\n!!! End of C1 Min Sup !!!\n")
-        
-
-
-        # Step 1) Start of C2 Join multiple sets
-        C2_list = list()
-        for L_element in list(L_cnts.keys()):
-            for basic_element in basic_elements:
-                newSet = (L_element | basic_element)
-                if (len(newSet) > len(L_element)):
-                    C2_list.append(newSet)
-        # End of C2 Join multiple sets
-        
-        # Step 2) 
-        print("\n!!! Start of C2 Counter !!!\n")
-        C2 = dict()
-        for C2_list_element in set(C2_list):
-            for x_row in x_train:
-                if(C2_list_element.issubset(set(list(x_row.values())[0])) ):
-                    #print("%s < %s" % (C2_list_element , list(x_row.values())[0]))
-                    if(C2.get(C2_list_element) == None):
-                        C2[C2_list_element] = 1
-                    else:
-                        tmpcnt = C2[C2_list_element]
-                        C2[C2_list_element] = tmpcnt + 1
-        
-        print(C2)
-        print("\n!!! End of C2 Counter !!!\n")
-        
-        # Step 3) 
-        print("\n!!! Start of C2 Min Sup !!!\n")
-        L2 = copy.deepcopy(C2)
-        for C2_word, C2_count in C2.items():
-            if(C2_count < min_sup):
-                L2.pop(C2_word)
-        
-        print(L2)
-        print("\n!!! End of C2 Min Sup !!!\n")
+        print("L%s : %s" % (apriori_idx , L1) ) 
+        print("\n!!! End of L%s Min Sup !!!\n" % apriori_idx)
         
         
-        
-        
-        
-        
+        while(True):
+            apriori_idx += 1
+            
+            # Step 1) Start of C2 Join multiple sets
+            C2_list = list()
+            for L_element in list(L1.keys()):
+                for basic_element in basic_elements:
+                    newSet = (L_element | basic_element)
+                    if (len(newSet) > len(L_element)):
+                        C2_list.append(newSet)
+            # End of C2 Join multiple sets
+            
+            # Step 2) 
+            print("\n!!! Start of C%s Counter !!!\n" % apriori_idx)
+            C2 = dict()
+            for C2_list_element in set(C2_list):
+                for x_row in x_train:
+                    if(C2_list_element.issubset(set(list(x_row.values())[0])) ):
+                        #print("%s < %s" % (C2_list_element , list(x_row.values())[0]))
+                        if(C2.get(C2_list_element) == None):
+                            C2[C2_list_element] = 1
+                        else:
+                            tmpcnt = C2[C2_list_element]
+                            C2[C2_list_element] = tmpcnt + 1
+            
+            print("C%s : %s" % (apriori_idx , C2) ) 
+            print("\n!!! End of C%s Counter !!!\n" % apriori_idx)
+            
+            # Step 3) 
+            print("\n!!! Start of L%s Min Sup !!!\n" % apriori_idx)
+            L2 = copy.deepcopy(C2)
+            for C2_word, C2_count in C2.items():
+                if(C2_count < min_sup):
+                    L2.pop(C2_word)
+            
+            print("L%s : %s" % (apriori_idx , L2) ) 
+            print("\n!!! End of L%s Min Sup !!!\n" % apriori_idx)
+            
+            
+            #print("\n!!! Start of Stop Regulation !!!\n")
+            if(len(L2) == 0):
+                break
+            
+            L1 = L2
         
         
         print("\n!!! End of Apriori Pattern !!!\n")
