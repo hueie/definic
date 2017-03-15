@@ -72,9 +72,9 @@ def	regression(request):
 	if request.method == 'GET':
 		form = RegressionForm(request.GET)
 		if form.is_valid():
-			pStockCode = form.cleaned_data['pStock_code']
-			if(pStockCode != ""):
-				stock_code = pStockCode
+			pStock_code = form.cleaned_data['pStock_code']
+			if(pStock_code != ""):
+				stock_code = pStock_code
 	elif request.method == 'POST':
 		pass
 	
@@ -196,13 +196,13 @@ def	neuralnetwork(request):
 	train, test = preprocessor.splitDataset(data, 0.8)
 
 	x_train = np.array([ [row] for row in train['open'] ])
-	y_train = np.array(train['adj_close'])
+	y_train = np.array(train['adj_close'], dtype=np.int)
 	x_test = np.array([ [row] for row in test['open'] ])
-	y_test = np.array(test['adj_close'])
+	y_test = np.array(test['adj_close'], dtype=np.int)
 
 	mlpclassifiermodel = MLPClassifierModel()
 	fit = mlpclassifiermodel.train( x_train, y_train)
-	y_pred = mlpclassifiermodel.predict( x_test)
+	y_pred = np.array( mlpclassifiermodel.predict( x_test))
 	score = mlpclassifiermodel.score(x_test, y_test)
 	hitratio = mlpclassifiermodel.hitRatio(y_test, y_pred)
 	mse = mlpclassifiermodel.meanSquaredError(y_test, y_pred)

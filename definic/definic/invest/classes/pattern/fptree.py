@@ -47,6 +47,7 @@ class Fptree:
         print(basis_order)
         
         #Preparing Empty Tree Including Null Root 
+        '''
         tree = []
         for idx in range(len(basis_order)+1):
             tmplist = []
@@ -56,6 +57,8 @@ class Fptree:
             tree.append(tmplist)
 
         tree = np.array(tree)
+        '''
+        tree = np.zeros( (len(basis_order)+1, len(basis_order)+1) , dtype=np.float64)
         
         #print("\t", self.L_list[0][ frozenset({'I2'}) ])
         

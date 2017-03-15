@@ -43,7 +43,7 @@ def	dataUpdate(request):
 	elif request.method == 'POST':
 		pass
 	
-	rsltlst = datawarehouse.selectYahooDataFromDB(pStockcode)
+	rsltlst = datawarehouse.selectYahooPeriodDataFromDB()
 	
 	DataWareHouseModel.objects.all().delete()
 	if DataWareHouseModel.objects.count() == 0:

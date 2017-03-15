@@ -14,7 +14,6 @@ class DBHandler():
             try:
                 self.dbtype = "sqlite3"
                 self.conn = sq3.connect("definic/definic.sqlite3") #, isolation_level=exclusive
-                self.initdb()
             except Exception as error:
                 print(">>> Unexpected error in Connection to Sqlite3 : ", error)
                 
@@ -23,9 +22,7 @@ class DBHandler():
             pass
         elif(self.dbtype == "sqlite3"):
             #sql = "DROP TABLE data_stock_usa" ; self.execSql(sql)
-            sql = "CREATE TABLE data_stock_usa (stock_code TEXT, date TEXT, lst_reg_dt TEXT, open REAL, high REAL, low REAL, close REAL, volume REAL, adj_close REAL)"
-            self.execSql(sql)
-            sql = "INSERT INTO data_stock_usa VALUES ('YS', '', '', 0, 0, 0, 0, 0, 0)"
+            sql = "CREATE TABLE data_stock_usa (stock_code TEXT NOT NULL , date TEXT NOT NULL , lst_reg_dt TEXT, open INTEGER, high INTEGER, low INTEGER, close INTEGER, volume INTEGER, adj_close INTEGER, PRIMARY KEY(stock_code, date))"
             self.execSql(sql)
         pass
         

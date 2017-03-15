@@ -33,10 +33,10 @@ def	alphamodel(request):
 	train, test = preprocessor.splitDataset(data, 0.9)
 
 	x_train = np.array([ [row] for row in train['open'] ])
-	y_train = np.array(train['adj_close'])
+	y_train = np.array(train['adj_close'], dtype=int)
 
 	x_test = np.array([ [row] for row in test['open'] ])
-	y_test = np.array(test['adj_close'])
+	y_test = np.array(test['adj_close'], dtype=int)
 
 	alphamodel = MeanReversionModel()
 	halflife = alphamodel.calcHalfLife(y_train)
