@@ -372,21 +372,21 @@ def principal_component_analysis():
     import pandas.io.data as web
     from sklearn.decomposition import KernelPCA
     
-    symbols = [‘ADS.DE’, ‘ALV.DE’, ‘BAS.DE’, ‘BAYN.DE’, ‘BEI.DE’,
-        ‘BMW.DE’, ‘CBK.DE’, ‘CON.DE’, ‘DAI.DE’, ‘DB1.DE’,
-        ‘DBK.DE’, ‘DPW.DE’, ‘DTE.DE’, ‘EOAN.DE’, ‘FME.DE’,
-        ‘FRE.DE’, ‘HEI.DE’, ‘HEN3.DE’, ‘IFX.DE’, ‘LHA.DE’,
-        ‘LIN.DE’, ‘LXS.DE’, ‘MRK.DE’, ‘MUV2.DE’, ‘RWE.DE’,
-        ‘SAP.DE’, ‘SDF.DE’, ‘SIE.DE’, ‘TKA.DE’, ‘VOW3.DE’,
-        ‘^GDAXI’]
+    symbols = ["ADS.DE", "ALV.DE", "BAS.DE", "BAYN.DE", "BEI.DE",
+        "BMW.DE", "CBK.DE", "CON.DE", "DAI.DE", "DB1.DE",
+        "DBK.DE", "DPW.DE", "DTE.DE", "EOAN.DE", "FME.DE",
+        "FRE.DE", "HEI.DE", "HEN3.DE", "IFX.DE", "LHA.DE",
+        "LIN.DE", "LXS.DE", "MRK.DE", "MUV2.DE", "RWE.DE",
+        "SAP.DE", "SDF.DE", "SIE.DE", "TKA.DE", "VOW3.DE",
+        "^GDAXI"]
     
     %%time
     data = pd.DataFrame()
     for sym in symbols:
-        data[sym] = web.DataReader(sym, data_source=‘yahoo’)[‘Close’]
+        data[sym] = web.DataReader(sym, data_source="yahoo")["Close"]
     data = data.dropna()
     
-    dax = pd.DataFrame(data.pop(‘^GDAXI’))
+    dax = pd.DataFrame(data.pop("^GDAXI"))
     data[data.columns[:6]].head()
     
     #Applying PCA
@@ -401,7 +401,7 @@ def principal_component_analysis():
     
     #Constructing a PCA Index
     pca = KernelPCA(n_components=1).fit(data.apply(scale_function))
-    dax[‘PCA_1’] = pca.transform(-data)
+    dax["PCA_1"] = pca.transform(-data)
     
     import matplotlib.pyplot as plt
     %matplotlib inline
@@ -410,7 +410,7 @@ def principal_component_analysis():
     pca = KernelPCA(n_components=5).fit(data.apply(scale_function))
     pca_components = pca.transform(-data)
     weights = get_we(pca.lambdas_)
-    dax[‘PCA_5’] = np.dot(pca_components, weights)
+    dax["PCA_5"] = np.dot(pca_components, weights)
     
     import matplotlib.pyplot as plt
     %matplotlib inline
@@ -420,37 +420,37 @@ def principal_component_analysis():
     mpl_dates = mpl.dates.date2num(data.index)
     mpl_dates
     plt.figure(figsize=(8, 4))
-    plt.scatter(dax[‘PCA_5’], dax[‘^GDAXI’], c=mpl_dates)
-    lin_reg = np.polyval(np.polyfit(dax[‘PCA_5’],
-    dax[‘^GDAXI’], 1),
-    dax[‘PCA_5’])
-    plt.plot(dax[‘PCA_5’], lin_reg, ‘r’, lw=3)
+    plt.scatter(dax["PCA_5"], dax["^GDAXI"], c=mpl_dates)
+    lin_reg = np.polyval(np.polyfit(dax["PCA_5"],
+    dax["^GDAXI"], 1),
+    dax["PCA_5"])
+    plt.plot(dax["PCA_5"], lin_reg, "r", lw=3)
     plt.grid(True)
-    plt.xlabel(‘PCA_5’)
-    plt.ylabel(‘^GDAXI’)
+    plt.xlabel("PCA_5")
+    plt.ylabel("^GDAXI")
     plt.colorbar(ticks=mpl.dates.DayLocator(interval=250),
-    format=mpl.dates.DateFormatter(’%d %b %y’))
+    format=mpl.dates.DateFormatter("%d %b %y"))
     
-    cut_date = ‘2011/7/1’
-    early_pca = dax[dax.index < cut_date][‘PCA_5’]
+    cut_date = "2011/7/1"
+    early_pca = dax[dax.index < cut_date]["PCA_5"]
     early_reg = np.polyval(np.polyfit(early_pca,
-    dax[‘^GDAXI’][dax.index < cut_date], 1),
+    dax["^GDAXI"][dax.index < cut_date], 1),
     early_pca)
     
-    late_pca = dax[dax.index >= cut_date][‘PCA_5’]
+    late_pca = dax[dax.index >= cut_date]["PCA_5"]
     late_reg = np.polyval(np.polyfit(late_pca,
-    dax[‘^GDAXI’][dax.index >= cut_date], 1),
+    dax["^GDAXI"][dax.index >= cut_date], 1),
     late_pca)
     
     plt.figure(figsize=(8, 4))
-    plt.scatter(dax[‘PCA_5’], dax[‘^GDAXI’], c=mpl_dates)
-    plt.plot(early_pca, early_reg, ‘r’, lw=3)
-    plt.plot(late_pca, late_reg, ‘r’, lw=3)
+    plt.scatter(dax["PCA_5"], dax["^GDAXI"], c=mpl_dates)
+    plt.plot(early_pca, early_reg, "r", lw=3)
+    plt.plot(late_pca, late_reg, "r", lw=3)
     plt.grid(True)
-    plt.xlabel(‘PCA_5’)
-    plt.ylabel(‘^GDAXI’)
+    plt.xlabel("PCA_5")
+    plt.ylabel("^GDAXI")
     plt.colorbar(ticks=mpl.dates.DayLocator(interval=250),
-    format=mpl.dates.DateFormatter(’%d %b %y’))
+    format=mpl.dates.DateFormatter("%d %b %y"))
     
 
     pass
@@ -458,7 +458,7 @@ def principal_component_analysis():
 
 def bayesian_regression():
     import warnings
-    warnings.simplefilter(‘ignore’)
+    warnings.simplefilter("ignore")
     import pymc as pm
     import numpy as np
     np.random.seed(1000)
@@ -471,12 +471,12 @@ def bayesian_regression():
     reg = np.polyfit(x, y, 1)
     
     plt.figure(figsize=(8, 4))
-    plt.scatter(x, y, c=y, marker=‘v’)
+    plt.scatter(x, y, c=y, marker="v")
     plt.plot(x, reg[1] + reg[0] * x, lw=2.0)
     plt.colorbar()
     plt.grid(True)
-    plt.xlabel(‘x’)
-    plt.ylabel(‘y’)
+    plt.xlabel("x")
+    plt.ylabel("y")
     
     reg
     
@@ -484,13 +484,13 @@ def bayesian_regression():
         # model specifications in PyMC3
         # are wrapped in a with statement
         # define priors
-        alpha = pm.Normal(‘alpha’, mu=0, sd=20)
-        beta = pm.Normal(‘beta’, mu=0, sd=20)
-        sigma = pm.Uniform(‘sigma’, lower=0, upper=10)
+        alpha = pm.Normal("alpha", mu=0, sd=20)
+        beta = pm.Normal("beta", mu=0, sd=20)
+        sigma = pm.Uniform("sigma", lower=0, upper=10)
         # define linear regression
         y_est = alpha + beta * x
         # define likelihood
-        likelihood = pm.Normal(‘y’, mu=y_est, sd=sigma, observed=y)
+        likelihood = pm.Normal("y", mu=y_est, sd=sigma, observed=y)
         # inference
         start = pm.find_MAP()
         # find starting value by optimization
@@ -501,27 +501,27 @@ def bayesian_regression():
     
     trace[0]
     
-    fig = pm.traceplot(trace, lines={‘alpha’: 4, ‘beta’: 2, ‘sigma’: 2})
+    fig = pm.traceplot(trace, lines={"alpha": 4, "beta": 2, "sigma": 2})
     plt.figure(figsize=(8, 8))
     plt.figure(figsize=(8, 4))
-    plt.scatter(x, y, c=y, marker=‘v’)
+    plt.scatter(x, y, c=y, marker="v")
     plt.colorbar()
     plt.grid(True)
-    plt.xlabel(‘x’)
-    plt.ylabel(‘y’)
+    plt.xlabel("x")
+    plt.ylabel("y")
     for i in range(len(trace)):
-        plt.plot(x, trace[‘alpha’][i] + trace[‘beta’][i] * x)
+        plt.plot(x, trace["alpha"][i] + trace["beta"][i] * x)
         
     pass
 
 def realdata():
     import warnings
-    warnings.simplefilter(‘ignore’)
+    warnings.simplefilter("ignore")
     import zipline
     import pytz
     import datetime as dt
     
-    data = zipline.data.load_from_yahoo(stocks=[‘GLD’, ‘GDX’],
+    data = zipline.data.load_from_yahoo(stocks=["GLD", "GDX"],
     end=dt.datetime(2014, 3, 15, 0, 0, 0, 0, pytz.utc)).dropna()
     data.info()
     data.plot(figsize=(8, 4))
@@ -535,20 +535,20 @@ def realdata():
     mpl_dates = mpl.dates.date2num(data.index)
     mpl_dates
     plt.figure(figsize=(8, 4))
-    plt.scatter(data[‘GDX’], data[‘GLD’], c=mpl_dates, marker=‘o’)
+    plt.scatter(data["GDX"], data["GLD"], c=mpl_dates, marker="o")
     plt.grid(True)
-    plt.xlabel(‘GDX’)
-    plt.ylabel(‘GLD’)
+    plt.xlabel("GDX")
+    plt.ylabel("GLD")
     plt.colorbar(ticks=mpl.dates.DayLocator(interval=250),
-                 format=mpl.dates.DateFormatter(’%d %b %y’))
+                 format=mpl.dates.DateFormatter("%d %b %y"))
     
     with pm.Model() as model:
-        alpha = pm.Normal(‘alpha’, mu=0, sd=20)
-        beta = pm.Normal(‘beta’, mu=0, sd=20)
-        sigma = pm.Uniform(‘sigma’, lower=0, upper=50)
-        y_est = alpha + beta * data[‘GDX’].values
-        likelihood = pm.Normal(‘GLD’, mu=y_est, sd=sigma,
-        observed=data[‘GLD’].values)
+        alpha = pm.Normal("alpha", mu=0, sd=20)
+        beta = pm.Normal("beta", mu=0, sd=20)
+        sigma = pm.Uniform("sigma", lower=0, upper=50)
+        y_est = alpha + beta * data["GDX"].values
+        likelihood = pm.Normal("GLD", mu=y_est, sd=sigma,
+        observed=data["GLD"].values)
         start = pm.find_MAP()
         step = pm.NUTS(state=start)
         trace = pm.sample(100, step, start=start, progressbar=False)
@@ -557,25 +557,25 @@ def realdata():
     plt.figure(figsize=(8, 8))    
         
     plt.figure(figsize=(8, 4))
-    plt.scatter(data[‘GDX’], data[‘GLD’], c=mpl_dates, marker=‘o’)
+    plt.scatter(data["GDX"], data["GLD"], c=mpl_dates, marker="o")
     plt.grid(True)
-    plt.xlabel(‘GDX’)
-    plt.ylabel(‘GLD’)
+    plt.xlabel("GDX")
+    plt.ylabel("GLD")
     for i in range(len(trace)):
-        plt.plot(data[‘GDX’], trace[‘alpha’][i] + trace[‘beta’][i] * data
-        [‘GDX’])
+        plt.plot(data["GDX"], trace["alpha"][i] + trace["beta"][i] * data
+        ["GDX"])
     plt.colorbar(ticks=mpl.dates.DayLocator(interval=250),
-    format=mpl.dates.DateFormatter(’%d %b %y’))    
+    format=mpl.dates.DateFormatter("%d %b %y"))    
         
     model_randomwalk = pm.Model()
     with model_randomwalk:
         # std of random walk best sampled in log space
         sigma_alpha, log_sigma_alpha = \
-            model_randomwalk.TransformedVar(‘sigma_alpha’,
+            model_randomwalk.TransformedVar("sigma_alpha",
             pm.Exponential.dist(1. / .02, testval=.1),
         pm.logtransform)
         sigma_beta, log_sigma_beta = \
-            model_randomwalk.TransformedVar(‘sigma_beta’,
+            model_randomwalk.TransformedVar("sigma_beta",
             pm.Exponential.dist(1. / .02, testval=.1),
             pm.logtransform)    
     
@@ -586,9 +586,9 @@ def realdata():
     subsample_alpha = 50
     subsample_beta = 50
     with model_randomwalk:
-        alpha = GaussianRandomWalk(‘alpha’, sigma_alpha**-2,
+        alpha = GaussianRandomWalk("alpha", sigma_alpha**-2,
         shape=len(data) / subsample_alpha)
-        beta = GaussianRandomWalk(‘beta’, sigma_beta**-2,
+        beta = GaussianRandomWalk("beta", sigma_beta**-2,
         shape=len(data) / subsample_beta)
         # make coefficients have the same length as prices
         alpha_r = np.repeat(alpha, subsample_alpha)
@@ -602,8 +602,8 @@ def realdata():
         regression = alpha_r + beta_r * data.GDX.values[:1950]
         # assume prices are normally distributed
         # the mean comes from the regression
-        sd = pm.Uniform(‘sd’, 0, 20)
-        likelihood = pm.Normal(‘GLD’,
+        sd = pm.Uniform("sd", 0, 20)
+        likelihood = pm.Normal("GLD",
         mu=regression,
         sd=sd,
         observed=data.GLD.values[:1950])
@@ -616,40 +616,40 @@ def realdata():
         step = pm.NUTS(scaling=start)
         trace_rw = pm.sample(100, step, start=start, progressbar=False)
     
-    np.shape(trace_rw[‘alpha’])
+    np.shape(trace_rw["alpha"])
     part_dates = np.linspace(min(mpl_dates), max(mpl_dates), 39)
     
     fig, ax1 = plt.subplots(figsize=(10, 5))
-    plt.plot(part_dates, np.mean(trace_rw[‘alpha’], axis=0), ‘b’, lw=2.5, label=‘alpha’)
+    plt.plot(part_dates, np.mean(trace_rw["alpha"], axis=0), "b", lw=2.5, label="alpha")
     for i in range(45, 55):
-        plt.plot(part_dates, trace_rw[‘alpha’][i], ‘b-.’, lw=0.75)
-    plt.xlabel(‘date’)
-    plt.ylabel(‘alpha’)
-    plt.axis(‘tight’)
+        plt.plot(part_dates, trace_rw["alpha"][i], "b-.", lw=0.75)
+    plt.xlabel("date")
+    plt.ylabel("alpha")
+    plt.axis("tight")
     plt.grid(True)
     plt.legend(loc=2)
-    ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter(’%d %b %y’) )
+    ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter("%d %b %y") )
     ax2 = ax1.twinx()
-    plt.plot(part_dates, np.mean(trace_rw[‘beta’], axis=0), ‘r’, lw=2.5, label=‘beta’)
+    plt.plot(part_dates, np.mean(trace_rw["beta"], axis=0), "r", lw=2.5, label="beta")
     for i in range(45, 55):
-        plt.plot(part_dates, trace_rw[‘beta’][i], ‘r-.’, lw=0.75)
-    plt.ylabel(‘beta’)
+        plt.plot(part_dates, trace_rw["beta"][i], "r-.", lw=0.75)
+    plt.ylabel("beta")
     plt.legend(loc=4)
     fig.autofmt_xdate()
     
     
     
     plt.figure(figsize=(10, 5))
-    plt.scatter(data[‘GDX’], data[‘GLD’], c=mpl_dates, marker=‘o’)
+    plt.scatter(data["GDX"], data["GLD"], c=mpl_dates, marker="o")
     plt.colorbar(ticks=mpl.dates.DayLocator(interval=250),
-    format=mpl.dates.DateFormatter(’%d %b %y’))
+    format=mpl.dates.DateFormatter("%d %b %y"))
     plt.grid(True)
-    plt.xlabel(‘GDX’)
-    plt.ylabel(‘GLD’)
-    x = np.linspace(min(data[‘GDX’]), max(data[‘GDX’]))
+    plt.xlabel("GDX")
+    plt.ylabel("GLD")
+    x = np.linspace(min(data["GDX"]), max(data["GDX"]))
     for i in range(39):
-        alpha_rw = np.mean(trace_rw[‘alpha’].T[i])
-        beta_rw = np.mean(trace_rw[‘beta’].T[i])
+        alpha_rw = np.mean(trace_rw["alpha"].T[i])
+        beta_rw = np.mean(trace_rw["beta"].T[i])
         plt.plot(x, alpha_rw + beta_rw * x, color=plt.cm.jet(256 * i / 39))
     
     
