@@ -35,6 +35,7 @@ def gen_paths(S0, r, sigma, T, M, I):
         paths[t] = paths[t - 1] * np.exp((r - 0.5 * sigma ** 2) * dt +
         sigma * np.sqrt(dt) * rand)
     return paths
+
 def Monte_Carlo_paths():
     S0 = 100.
     r = 0.05
@@ -109,11 +110,11 @@ def normality_tests(arr):
     array: ndarray
     object to generate statistics on
     """
-    print "Skew of data set %14.3f" % scs.skew(arr)
-    print "Skew test p-value %14.3f" % scs.skewtest(arr)[1]
-    print "Kurt of data set %14.3f" % scs.kurtosis(arr)
-    print "Kurt test p-value %14.3f" % scs.kurtosistest(arr)[1]
-    print "Norm test p-value %14.3f" % scs.normaltest(arr)[1]
+    print("Skew of data set %14.3f" % scs.skew(arr))
+    print("Skew test p-value %14.3f" % scs.skewtest(arr)[1])
+    print("Kurt of data set %14.3f" % scs.kurtosis(arr))
+    print("Kurt test p-value %14.3f" % scs.kurtosistest(arr)[1])
+    print("Norm test p-value %14.3f" % scs.normaltest(arr)[1])
     pass
 
 def print_statistics(array):
@@ -124,26 +125,27 @@ def print_statistics(array):
     object to generate statistics on
     """
     sta = scs.describe(array)
-    print "%14s %15s" % ("statistic", "value")
-    print 30 * "-"
-    print "%14s %15.5f" % ("size", sta[0])
-    print "%14s %15.5f" % ("min", sta[1][0])
-    print "%14s %15.5f" % ("max", sta[1][1])
-    print "%14s %15.5f" % ("mean", sta[2])
-    print "%14s %15.5f" % ("std", np.sqrt(sta[3]))
-    print "%14s %15.5f" % ("skew", sta[4])
-    print "%14s %15.5f" % ("kurtosis", sta[5])
+    print("%14s %15s" % ("statistic", "value"))
+    print(30 * "-")
+    print("%14s %15.5f" % ("size", sta[0]))
+    print("%14s %15.5f" % ("min", sta[1][0]))
+    print("%14s %15.5f" % ("max", sta[1][1]))
+    print("%14s %15.5f" % ("mean", sta[2]))
+    print("%14s %15.5f" % ("std", np.sqrt(sta[3])))
+    print("%14s %15.5f" % ("skew", sta[4]))
+    print("%14s %15.5f" % ("kurtosis", sta[5]))
     pass
 
 import pandas as pd
 import pandas.io.data as web   
     
 def realworld():
-     
     symbols = ["^GDAXI", "^GSPC", "YHOO", "MSFT"]
+    
     data = pd.DataFrame()
     for sym in symbols:
         data[sym] = web.DataReader(sym, data_source="yahoo", start="1/1/2006")["Adj Close"]
+    
     data = data.dropna()
     data.info()
     data.head()
@@ -154,8 +156,8 @@ def realworld():
     log_returns.hist(bins=50, figsize=(9, 6))
     
     for sym in symbols:
-        print "\nResults for symbol %s" % sym
-        print 30 * "-"
+        print("\nResults for symbol %s" % sym)
+        print(30 * "-")
         log_data = np.array(log_returns[sym].dropna())
         print_statistics(log_data)
     
@@ -170,26 +172,25 @@ def realworld():
     plt.ylabel("sample quantiles")
     
     for sym in symbols:
-        print "\nResults for symbol %s" % sym
-        print 32 * "-"
+        print("\nResults for symbol %s" % sym)
+        print(32 * "-")
         log_data = np.array(log_returns[sym].dropna())
         normality_tests(log_data)
     
     pass
+
 def basictheory():
     import numpy as np
     import pandas as pd
     import pandas.io.data as web
     import matplotlib.pyplot as plt
-    %matplotlib inline    
         
     symbols = ["AAPL", "MSFT", "YHOO", "DB", "GLD"]
     noa = len(symbols)    
         
     data = pd.DataFrame()
     for sym in symbols:
-        data[sym] = web.DataReader(sym, data_source="yahoo",
-        end="2014-09-12")["Adj Close"]
+        data[sym] = web.DataReader(sym, data_source="yahoo", end="2014-09-12")["Adj Close"]
     data.columns = symbols    
     
     (data / data.ix[0] * 100).plot(figsize=(8, 5))
@@ -247,8 +248,7 @@ def portfolio_optimization():
     pass
 
 def efficient_frontier():
-    cons = ({"type": "eq", "fun": lambda x: statistics(x)[0] - tret},
-    {"type": "eq", "fun": lambda x: np.sum(x) - 1})
+    cons = ( {"type": "eq", "fun": lambda x: statistics(x)[0] - tret}, {"type": "eq", "fun": lambda x: np.sum(x) - 1} )
     bnds = tuple((0, 1) for x in weights)
     
     %%time
@@ -264,11 +264,9 @@ def efficient_frontier():
     
     
     plt.figure(figsize=(8, 4))
-    plt.scatter(pvols, prets,
-    c=prets / pvols, marker="o")
+    plt.scatter(pvols, prets, c=prets / pvols, marker="o")
     # random portfolio composition
-    plt.scatter(tvols, trets,
-    c=trets / tvols, marker="x")
+    plt.scatter(tvols, trets, c=trets / tvols, marker="x")
     # efficient frontier
     plt.plot(statistics(opts["x"])[1], statistics(opts["x"])[0],
     "r*", markersize=15.0)
@@ -293,7 +291,7 @@ def min_func_variance(weights):
 
     
 def statistics(weights):
-    "" Returns portfolio statistics.
+    """ Returns portfolio statistics.
     Parameters
     ==========
     weights : array-like
@@ -306,7 +304,7 @@ def statistics(weights):
     expected portfolio volatility
     pret / pvol : float
     Sharpe ratio for rf=0
-    ""
+    """
     weights = np.array(weights)
     pret = np.sum(rets.mean() * weights) * 252
     pvol = np.sqrt(np.dot(weights.T, np.dot(rets.cov() * 252, weights)))
@@ -328,8 +326,7 @@ def Capital_Market_Line():
     np.round(equations(opt), 6)
     
     plt.figure(figsize=(8, 4))
-    plt.scatter(pvols, prets,
-    c=(prets - 0.01) / pvols, marker="o")
+    plt.scatter(pvols, prets, c=(prets - 0.01) / pvols, marker="o")
     # random portfolio composition
     plt.plot(evols, erets, "g", lw=4.0)
     # efficient frontier
@@ -345,20 +342,20 @@ def Capital_Market_Line():
     plt.colorbar(label="Sharpe ratio")
     
     
-    cons = ({"type": "eq", "fun": lambda x: statistics(x)[0] - f(opt[2])},
-    {"type": "eq", "fun": lambda x: np.sum(x) - 1})
-    res = sco.minimize(min_func_port, noa * [1. / noa,], method="SLSQP",
-    bounds=bnds, constraints=cons)
+    cons = ({"type": "eq", "fun": lambda x: statistics(x)[0] - f(opt[2])}, {"type": "eq", "fun": lambda x: np.sum(x) - 1})
+    res = sco.minimize(min_func_port, noa * [1. / noa,], method="SLSQP", bounds=bnds, constraints=cons)
     res["x"].round(3)
 
     pass
 
 def f(x):
-    "" Efficient frontier function (splines approximation). ""
+    """ Efficient frontier function (splines approximation). """
     return sci.splev(x, tck, der=0)
+
 def df(x):
-    "" First derivative of efficient frontier function. ""
+    """ First derivative of efficient frontier function. """
     return sci.splev(x, tck, der=1)
+
 def equations(p, rf=0.01):
     eq1 = rf - p[0]
     eq2 = rf + p[1] * p[2] - f(p[2])

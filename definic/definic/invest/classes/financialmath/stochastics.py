@@ -50,6 +50,93 @@ class Stochastics:
     def __init__(self):
         pass
     
+    def bsm_call_value(self, S0, K, T, r, sigma):
+        """ 
+        Valuation of European call option in BSM model.
+        Analytical formula.
+        Parameters
+        ==========
+        S0 : float
+        initial stock/index level
+        K : float
+        strike price
+        T : float
+        maturity date (in year fractions)
+        r : float
+        constant risk-free short rate
+        sigma : float
+        volatility factor in diffusion term
+        Returns
+        =======
+        value : float
+        present value of the European call option
+        """
+        from math import log, sqrt, exp
+        from scipy import stats
+        S0 = float(S0)
+        d1 = (log(S0 / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * sqrt(T))
+        d2 = (log(S0 / K) + (r - 0.5 * sigma ** 2) * T) / (sigma * sqrt(T))
+        value = (S0 * stats.norm.cdf(d1, 0.0, 1.0)
+        - K * exp(-r * T) * stats.norm.cdf(d2, 0.0, 1.0))
+        # stats.norm.cdf —> cumulative distribution function
+        # for normal distribution
+        return value
+    # Vega function
+    def bsm_vega(self, S0, K, T, r, sigma):
+        """ Vega of European option in BSM model.
+        Parameters
+        ==========
+        S0 : float
+        initial stock/index level
+        K : float
+        strike price
+        T : float
+        maturity date (in year fractions)
+        r : float
+        constant risk-free short rate
+        sigma : float
+        volatility factor in diffusion term
+        Returns
+        =======
+        vega : float
+        partial derivative of BSM formula with respect
+        to sigma, i.e. Vega
+        """
+        from math import log, sqrt
+        from scipy import stats
+        S0 = float(S0)
+        d1 = (log(S0 / K) + (r + 0.5 * sigma ** 2) * T / (sigma * sqrt(T)))
+        vega = S0 * stats.norm.cdf(d1, 0.0, 1.0) * sqrt(T)
+        return vega   
+    
+    def bsm_call_imp_vol(self, S0, K, T, r, C0, sigma_est, it=100):
+        """ 
+        Implied volatility of European call option in BSM model.
+        Parameters
+        ==========
+        S0 : float
+        initial stock/index level
+        K : float
+        strike price
+        T : float
+        maturity date (in year fractions)
+        r : float
+        constant risk-free short rate
+        sigma_est : float
+        estimate of impl. volatility
+        it : integer
+        number of iterations
+        Returns
+        =======
+        simga_est : float
+        numerically estimated implied volatility
+        """
+        for i in range(it):
+            sigma_est -= ((self.bsm_call_value(S0, K, T, r, sigma_est) - C0) / self.bsm_vega(S0, K, T, r, sigma_est))
+        return sigma_est
+    
+    
+    
     def print_statistics(self, a1, a2):
         sta1 = scs.describe(a1)
         sta2 = scs.describe(a2)
@@ -180,7 +267,6 @@ class Stochastics:
         # %time x2 = srd_exact()
         self.print_statistics(x1[-1], x2[-1])
         x1 = 0.0; x2 = 0.0
-        
         pass
     
     def heston_stochastic_volatility_model(self):
@@ -233,8 +319,8 @@ class Stochastics:
         ax2.plot(v[:, :10], lw=1.5) ; ax2.set_xlabel("time") ; ax2.set_ylabel("volatility") ; ax2.grid(True)
         plt.show()
         self.print_statistics(S[-1], v[-1])
-        
         pass
+    
     def jump_diffusion(self):
         #Stochastic differential equation for Merton jump diffusion model
         S0 = 100.
@@ -265,7 +351,6 @@ class Stochastics:
         plt.show()
         plt.plot(S[:, :10], lw=1.5) ; plt.xlabel("time") ; plt.ylabel("index level") ; plt.grid(True)
         plt.show()
-        
         pass
     
     def variance_reduction(self):
@@ -303,7 +388,6 @@ class Stochastics:
         sn_new_gen = self.gen_sn(M = 50, I = 10000)
         print(sn_new_gen.mean())
         print(sn_new_gen.std())
-        
         pass
     
     def gen_sn(self, M, I, anti_paths=True, mo_match=True):
@@ -383,8 +467,6 @@ class Stochastics:
         ax2.set_xlim(left=75, right=125)
         ax2.grid(True)
         plt.show()
-        
-        
         pass
     
     def gbm_mcs_stat(self, K):
@@ -646,6 +728,8 @@ class Stochastics:
         plt.grid(True)
         plt.ylim(ymax=350)
         pass
+    
+    
 if __name__=="__main__":
     stochastics = Stochastics()
 #    stochastics.random_numbers()
@@ -655,4 +739,8 @@ if __name__=="__main__":
 #    stochastics.jump_diffusion()
 #    stochastics.variance_reduction()
     stochastics.european_options_valuation()
+    stochastics.american_options_valuation()
+    stochastics.value_at_risk()
+    stochastics.credit_value_adjustments()
+    
     pass
