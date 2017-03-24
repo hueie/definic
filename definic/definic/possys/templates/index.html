@@ -1,0 +1,72 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>DEFINIC</title>
+
+	
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "possys/vendor/bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="{% static "possys/vendor/metisMenu/metisMenu.min.css" %}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static "possys/dist/css/definic.css" %}" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="{% static "possys/vendor/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
+    <!-- Morris Charts CSS -->
+    <link href="{% static "possys/vendor/morrisjs/morris.css" %}" rel="stylesheet">
+	<script src="{% static "possys/dist/js/definic.js" %}"></script>
+    
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/possys/">Definic</a>
+                <a id="leftbarfadein" style="display:inline;"class="navbar-brand" href="javascript:leftbarfadein();"><i class="fa fa-bars"></i></a>
+            </div>
+            {% include "navbar_top.html" %}
+
+			<div id="leftbar" class="leftbar leftbar-fadeout">
+			{% include "navbar_left.html" %}
+			</div>
+        </nav>
+        <div id="page-wrapper" class="page-leftbar-fadeout">
+        	{% if submenu == "index" %}
+	        	Index
+        	{% elif submenu == "descriptive"%}
+				{% include "statistics/descriptive.html" %}
+        	{% elif submenu == "lineargraph"%}
+				{% include "statistics/lineargraph.html" %}
+        	{% elif submenu == "regression"%}
+				{% include "datascience/regression.html" %}
+        	{% elif submenu == "neuralnetwork"%}
+				{% include "datascience/neuralnetwork.html" %}
+        	{% elif submenu == "preprocessor"%}
+				{% include "datascience/preprocessor.html" %}
+        	{% elif submenu == "datawarehouse"%}
+				{% include "backstage/datawarehouse.html" %}
+			{% elif submenu == "alphamodel"%}
+				{% include "middlestage/alphamodel.html" %}	
+        	{% elif submenu == "portfoliobuilder"%}
+				{% include "frontstage/portfoliobuilder.html" %}	
+        	{% else %}
+	        	No Pages
+        	{% endif %}
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    {% include "footer.html" %}
+	
+</body>
+</html>

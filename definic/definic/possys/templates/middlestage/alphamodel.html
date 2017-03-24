@@ -1,0 +1,47 @@
+{% load staticfiles %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h3 class="page-header">{{ mainmenu }} > {{ submenu }}</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<form action="/possys/middlestage/alphamodel/" method="get" >
+			<span>Stock Code : </span>
+			
+			<select name="pStock_code" id="pStock_code">
+  				{% for row in pCodelist %}
+  					<option value="{{ row }}" {% if row == pStock_code %} selected="selected" {% endif %} >
+  					{{ row }}</option>
+  				{% endfor %}
+			</select>
+			<input type="submit" value="submit" >
+		</form>
+		
+		<br>
+		<table style="width:100%;border:solid 1px white;" >
+			<tr>
+				<td style="width:10%"> Stock Code </td>
+				<td style="width:10%"> MR Position </td>
+				<td style="width:20%"> HalfLife </td>
+				<td style="width:20%"> Hurst Exponent </td>
+				<td style="width:20%"> ADF </td>
+				<td style="width:20%"> ML Position</td>
+			</tr>
+			{% for row in pAlphaModelModel %}
+			<tr>
+				<td> {{ row.stock_code }} </td>
+				<td> {{ row.mr_det_pos }} </td>
+				<td> {{ row.halflife }} </td>
+				<td> {{ row.hurstexponent }} </td>
+				<td> {{ row.adf }} </td>
+				<td> {{ row.ml_det_pos }} </td>
+			</tr>
+			{% endfor %}
+		</table>	
+			
+	</div>
+</div>
+

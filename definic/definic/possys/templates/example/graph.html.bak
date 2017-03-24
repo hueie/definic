@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<!-- jqery 1.8.2 -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<!--
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+-->
+<script type="text/javascript" src="{% static "possys/vendor/highchartsjs/highcharts-5.0.6.js" %}"></script>
+<script src="{% static "possys/vendor/highchartsjs/themes/gray.js" %}" type="text/javascript"></script>
+
+{% load chartit %}
+{{ stockchart|load_charts:"mygraphcontainer" }}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">{{ maintitle }}</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">{{ subtitle }}</div>
+			<div class="panel-body">
+				<div  id="mygraphcontainer" style="min-width: 310px; height: 400px; margin: 0 auto;"></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+

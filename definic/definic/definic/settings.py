@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
 	'chartit',
+	'possys.apps.PossysConfig',
 	'invest.apps.InvestConfig',
     'django.contrib.admin',
     'django.contrib.auth',
