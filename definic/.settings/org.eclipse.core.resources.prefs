@@ -19,4 +19,5 @@ encoding//definic/possys/classes/common/commonutil.py=utf-8
 encoding//definic/possys/classes/common/const.py=utf-8
 encoding//definic/possys/classes/common/dbhandler.py=utf-8
 encoding//definic/possys/classes/inventory/inventory.py=utf-8
+encoding//definic/possys/migrations/0001_initial.py=utf-8
 encoding/<project>=UTF-8

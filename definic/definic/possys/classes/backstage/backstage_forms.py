@@ -1,6 +1,9 @@
 from django import forms
 
-class DataUpdateForm(forms.Form):
-    pStockcode = forms.CharField()
-    pStart = forms.CharField()
-    pEnd = forms.CharField()
+class insertInventoryToDBForm(forms.Form):
+    pIn_out = forms.CharField()
+    pFrom_to = forms.CharField()
+    pItem_id = forms.CharField()
+    pExpense = forms.CharField()
+    pQuantity = forms.CharField()
+    pDate = forms.CharField()

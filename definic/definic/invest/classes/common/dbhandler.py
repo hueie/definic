@@ -13,7 +13,7 @@ class DBHandler():
             print(">>> Unexpected error in Connection to Mysql : ", error)
             try:
                 self.dbtype = "sqlite3"
-                self.conn = sq3.connect("definic/definic.sqlite3") #, isolation_level=exclusive
+                self.conn = sq3.connect("definic/invest.sqlite3") #, isolation_level=exclusive
             except Exception as error:
                 print(">>> Unexpected error in Connection to Sqlite3 : ", error)
                 

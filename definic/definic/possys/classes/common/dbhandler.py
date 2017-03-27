@@ -13,7 +13,7 @@ class DBHandler():
             print(">>> Unexpected error in Connection to Mysql : ", error)
             try:
                 self.dbtype = "sqlite3"
-                self.conn = sq3.connect("definic/definic.sqlite3") #, isolation_level=exclusive
+                self.conn = sq3.connect("definic/possys.sqlite3") #, isolation_level=exclusive
             except Exception as error:
                 print(">>> Unexpected error in Connection to Sqlite3 : ", error)
                 
@@ -22,8 +22,8 @@ class DBHandler():
             pass
         elif(self.dbtype == "sqlite3"):
             #sql = "DROP TABLE data_stock_usa" ; self.execSql(sql)
-            #sql = "CREATE TABLE data_stock_usa (stock_code TEXT NOT NULL , date TEXT NOT NULL , lst_reg_dt TEXT, open INTEGER, high INTEGER, low INTEGER, close INTEGER, volume INTEGER, adj_close INTEGER, PRIMARY KEY(stock_code, date))"
-            #self.execSql(sql)
+            sql = "CREATE TABLE 'possys_inventory' ( 'in_out' INTEGER, 'from_to' TEXT, 'item_id' TEXT, 'expense' INTEGER, 'quantity' INTEGER, 'date' TEXT )"
+            self.execSql(sql)
             pass
         pass
         

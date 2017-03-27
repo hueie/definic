@@ -6,7 +6,7 @@ from .classes.backstage import backstage_views
 urlpatterns	= [
 	url(r'^$', views.index,	name='index'), 
 	url(r'^backstage/datawarehouse/$', backstage_views.datawarehouse,	name='datawarehouse'), 
-	url(r'^backstage/datawarehouse/update/$', backstage_views.dataUpdate,	name='dataUpdate'), 
+	url(r'^backstage/datawarehouse/insertInventoryToDB/$', backstage_views.insertInventoryToDB,	name='insertInventoryToDB'), 
 	
 #	url(r'^middlestage/alphamodel/$', middlestage_views.alphamodel,	name='alphamodel'), 
 	
