@@ -1,6 +1,6 @@
 from django.db import models
 
-
+'''
 class test1Model(models.Model):
 	usrname_text = models.CharField(max_length=200)
 
@@ -25,7 +25,7 @@ class CrudeOilModel(models.Model):
 			return
 		else:
 			super(CrudeOilModel, self).save(*args, **kwargs) # Call	the	"real" save() 
-	
+'''	
 
 	#def delete(self, *args, **kwargs):
 	#	 if	self.name == "Yoko Ono's blog":

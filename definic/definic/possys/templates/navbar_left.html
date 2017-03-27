@@ -7,28 +7,6 @@
 					<a style="display:inline;">possys</a>
 					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
 				</li>
-			{% elif mainmenu == "statistics" %}
-				<li>
-					<a style="display:inline;">Statistics</a>
-					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="/possys/statistics/lineargraph/">Linear Graph</a>
-				</li>	
-			{% elif mainmenu == "datascience" %}
-				<li>
-					<a style="display:inline;">Data Science</a>
-					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="/possys/datascience/regression/">Regression</a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="/possys/datascience/preprocessor/">Preprocessor</a>
-				</li>
         	{% elif mainmenu == "backstage" %}
 	        	<li>
 					<a style="display:inline;">Back Stage</a>
@@ -40,15 +18,6 @@
 				</li>
 				<li>
 					<a href="/possys/backstage/backtester/" >Back Tester</a>
-				</li>
-			{% elif mainmenu == "middlestage" %}
-	        	<li>
-					<a style="display:inline;">Middle Stage</a>
-					<a style="display:inline;" id="leftbarfadeout" href="javascript:leftbarfadeout();"><i class="fa fa-bars"></i></a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="/possys/middlestage/alphamodel/">AlphaModel</a>
 				</li>
         	{% endif %}
 		</ul>

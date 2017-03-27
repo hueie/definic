@@ -22,8 +22,9 @@ class DBHandler():
             pass
         elif(self.dbtype == "sqlite3"):
             #sql = "DROP TABLE data_stock_usa" ; self.execSql(sql)
-            sql = "CREATE TABLE data_stock_usa (stock_code TEXT NOT NULL , date TEXT NOT NULL , lst_reg_dt TEXT, open INTEGER, high INTEGER, low INTEGER, close INTEGER, volume INTEGER, adj_close INTEGER, PRIMARY KEY(stock_code, date))"
-            self.execSql(sql)
+            #sql = "CREATE TABLE data_stock_usa (stock_code TEXT NOT NULL , date TEXT NOT NULL , lst_reg_dt TEXT, open INTEGER, high INTEGER, low INTEGER, close INTEGER, volume INTEGER, adj_close INTEGER, PRIMARY KEY(stock_code, date))"
+            #self.execSql(sql)
+            pass
         pass
         
     def execSql(self,sql,db_commit=True):

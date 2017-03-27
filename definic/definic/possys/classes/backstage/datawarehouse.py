@@ -4,9 +4,11 @@ import sys,os
 sys.path.append((os.path.sep).join( os.getcwd().split(os.path.sep)[0:-1]))
 from common.dbhandler import DBHandler
 '''
-
 from ..common.dbhandler import DBHandler
 from ..common.commonutil import CommonUtil
+
+
+
 import datetime
 import pandas as pd
 import pandas_datareader.data as webdata
@@ -20,6 +22,16 @@ class DataWareHouse:
 		self.stockcode = ""
 		if pdata is	not None:
 			self.data =	pdata
+	
+	def selectInventoryFromDB(self, item_name):
+		sql = "SELECT in_out, from_to, item_id, expanse, quantity, date FROM possys_inventroy"
+		return pd.read_sql(sql, self.dbhandler.conn)
+	
+		
+		
+		
+		
+		
 		
 	def	getYahooDataFromWeb(self, pStockCode, pStart, pEnd ):
 		self.stockcode = pStockCode
