@@ -22,8 +22,15 @@ class DBHandler():
             pass
         elif(self.dbtype == "sqlite3"):
             #sql = "DROP TABLE data_stock_usa" ; self.execSql(sql)
+            sql = "CREATE TABLE 'possys_item' ( 'item_id' TEXT, 'barcode' INTEGER, 'item_name' TEXT, 'cur_price' INTEGER, 'cur_place' TEXT, 'cur_quantity' INTEGER, 'item_date' TEXT )"
+            self.execSql(sql)
+            sql = "CREATE TABLE 'possys_transaction' ( 'tr_id' TEXT, 'pos_num' INTEGER, 'item_id' TEXT, 'tr_price' INTEGER, 'tr_quantity' INTEGER, 'tr_date' TEXT )"
+            self.execSql(sql)
+            sql = "CREATE TABLE 'possys_bill' ( 'tr_id' TEXT, 'total_cost' INTEGER, 'tax' INTEGER, 'card' INTEGER, 'bill_date' TEXT )"
+            self.execSql(sql)
             sql = "CREATE TABLE 'possys_inventory' ( 'in_out' INTEGER, 'from_to' TEXT, 'item_id' TEXT, 'expense' INTEGER, 'quantity' INTEGER, 'date' TEXT )"
             self.execSql(sql)
+            
             pass
         pass
         

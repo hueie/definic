@@ -43,10 +43,12 @@
         <div id="page-wrapper" class="page-leftbar-fadeout">
         	{% if submenu == "index" %}
 	        	Index
-        	{% elif submenu == "datawarehouse"%}
+        	{% elif submenu == "datawarehouse" %}
 				{% include "backstage/datawarehouse.html" %}
-			{% elif submenu == "item"%}
-				{% include "backstage/item.html" %}	
+			{% elif submenu == "transaction" %}
+				{% include "backstage/transaction.html" %}	
+			{% elif submenu == "item" %}
+				{% include "backstage/item.html" %}		
         	{% else %}
 	        	No Pages
         	{% endif %}

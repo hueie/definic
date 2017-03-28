@@ -77,10 +77,3 @@ class DataWareHouse:
 		
 		self.dbhandler.execSql(sql)
 		pass
-		
-'''
-if __name__ == "__main__":
-	datawarehouse = DataWareHouse()
-	datawarehouse.getYahooDataFromWeb("GOOG", "03/03/2016", "03/04/2016")
-	datawarehouse.updateYahooData()
-'''

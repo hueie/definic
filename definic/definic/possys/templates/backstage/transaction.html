@@ -1,0 +1,68 @@
+{% load staticfiles %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h3 class="page-header">{{ mainmenu }} > {{ submenu }}</h3>
+	</div>
+</div>
+<script type="text/javascript">
+function plusDiv(){
+	$( ".tr_input" ).last().clone().appendTo( "#tr_input_list" );
+}
+function minusDiv(){
+	if( $( ".tr_input" ).length  > 1 ){
+		$( ".tr_input" ).last().remove();
+	}
+}
+</script>
+<div class="row">
+	<div class="col-lg-12">
+		<form action="/possys/backstage/transaction/insertTransactionToDB/" method="post" name="insertTransactionToDBForm">
+			{% csrf_token %}
+			<div>
+				<!-- <span>pTr_id : </span> -->
+				<input type="hidden" name="pTr_id" value="" >
+				<span> pPos_num : </span>
+				<input type="text" name="pPos_num" value="" >
+				<!-- <span>pTr_Date : </span> -->
+				<input type="hidden" name="pTr_Date" value="" >
+				<input type="submit" value="submit">
+				<input type="button" value="+" onclick="plusDiv()">
+				<input type="button" value="-" onclick="minusDiv()">
+			</div>
+			<div id="tr_input_list">
+				<div id="tr_input" class="tr_input">
+					<span>pItem_id : </span>
+					<input type="text" name="pItem_id" value="" >
+					<span>pTr_price : </span>
+					<input type="text" name="pTr_price" value="" >
+					<span>pTr_quantity : </span>
+					<input type="text" name="pTr_quantity" value="" >
+				</div>
+			</div>
+		</form>
+		<br>
+		<table style="width:100%;border:solid 1px white;" >
+			<tr>
+				<td style="width:10%">Tr_id</td>
+				<td style="width:10%">Pos_num</td>
+				<td style="width:10%">tem_id</td>
+				<td style="width:10%">Tr_price</td>
+				<td style="width:10%">Tr_quantity</td>
+				<td style="width:10%">Tr_Date</td>
+			</tr>
+			{% for row in pTransactionModel %}
+			<tr>
+				<td> {{ row.Tr_id }}</td>
+				<td> {{ row.Pos_num }} </td>
+				<td> {{ row.Item_id }} </td>
+				<td> {{ row.Tr_price }} </td>
+				<td> {{ row.Tr_quantity }} </td>
+				<td> {{ row.Tr_date }} </td>
+			</tr>
+			{% endfor %}
+		</table>	
+			
+	</div>
+</div>
+

@@ -1,0 +1,65 @@
+{% load staticfiles %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h3 class="page-header">{{ mainmenu }} > {{ submenu }}</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<form action="/possys/backstage/item/insertItemToDB/" method="get" name="insertItemToDBForm">
+			<!-- <span>pItem_id : </span> -->
+			<input type="hidden" name="pItem_id" value="{{ pItem_id }}" >
+			<span> pItem_name : </span>
+			<input type="text" name="pItem_name" value="{{ pItem_name }}" >
+			<span>pBarcode : </span>
+			<input type="text" name="pBarcode" value="{{ pBarcode }}" >
+			<span>pCur_price : </span>
+			<input type="text" name="pCur_price" value="{{ pCur_price }}" >
+			<span>pCur_quantity : </span>
+			<input type="text" name="pCur_quantity" value="{{ pCur_quantity }}" >
+			<span>pCur_place : </span>
+			<input type="text" name="pCur_place" value="{{ pCur_place }}" >
+			<!-- <span>pItem_date : </span> -->
+			<input type="hidden" name="pItem_date" value="{{ pItem_date }}" >
+			<input type="submit"  value="submit">
+		</form>
+		<br>
+		<table style="width:100%;border:solid 1px white;" >
+			<tr>
+				<td style="width:10%">Item_id</td>
+				<td style="width:10%">Item_name</td>
+				<td style="width:10%">Barcode</td>
+				<td style="width:10%">Cur_price</td>
+				<td style="width:10%">Cur_quantity</td>
+				<td style="width:10%">Cur_place</td>
+				<td style="width:10%">Item_date</td>
+				<td style="width:10%">Modify </td>
+				<td style="width:10%">Delete </td>
+			</tr>
+			{% for row in pItemModel %}
+			<tr>
+				<form action="/possys/backstage/item/updateItemToDB/" method="post" name="updateItemToDBForm">
+				{% csrf_token %}
+				<td> <input type="text" name="pItem_id" value="{{ row.Item_id }}" readonly> </td>
+				<td> <input type="text" name="pItem_name" value="{{ row.Item_name }}"> </td>
+				<td> <input type="text" name="pBarcode" value="{{ row.Barcode }}"> </td>
+				<td> <input type="text" name="pCur_price" value="{{ row.Cur_price }}"> </td>
+				<td> <input type="text" name="pCur_quantity" value="{{ row.Cur_quantity }}"> </td>
+				<td> <input type="text" name="pCur_place" value="{{ row.Cur_place }}"> </td>
+				<td> <input type="text" name="pItem_date" value="{{ row.Item_date }}"> </td>
+				<td><input type="submit" value="modify"> </td>
+				</form>
+				<form action="/possys/backstage/item/deleteItemToDB/" method="post" name="deleteItemToDBForm">
+				{% csrf_token %}
+					<input type="hidden" name="pItem_id" value="{{ row.Item_id }}"> 
+				<td><input type="submit" value="delete"> </td>
+				</form>
+			</tr>
+			{% endfor %}
+		</table>	
+			
+	</div>
+</div>
+
