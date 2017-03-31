@@ -1,80 +1,108 @@
 from django.shortcuts import render
-from .datawarehouse import DataWareHouse
+from .inventory import Inventory
 from .transaction import Transaction
 from .item import Item
+from .itemcategory import Itemcategory
 from .backstage_forms import insertInventoryToDBForm, insertTransactionToDBForm, insertItemToDBForm
-from .backstage_models import DataWareHouseModel, TransactionModel, ItemModel
+from .backstage_models import InventoryModel, TransactionModel, ItemModel, ItemcategoryModel
 
-def	datawarehouse(request):
-	mainmenu = "backstage" ; submenu = "datawarehouse"
+
+def	inventory(request):
+	mainmenu = "backstage" ; submenu = "inventory"
 	
-	datawarehouse = DataWareHouse()
-	rsltlst = datawarehouse.selectInventoryFromDB()
+	inventory = Inventory()
+	rsltlst = inventory.selectInventoryFromDB()
 
-	DataWareHouseModel.objects.all().delete()
-	if DataWareHouseModel.objects.count() == 0:
+	InventoryModel.objects.all().delete()
+	if InventoryModel.objects.count() == 0:
 		for row_idx in range(rsltlst.shape[0]):
-			DataWareHouseModel.objects.create(
+			InventoryModel.objects.create(
+				Inv_id= rsltlst.loc[row_idx, 'inv_id'],
 				In_out= rsltlst.loc[row_idx, 'in_out'],
 				From_to= rsltlst.loc[row_idx, 'from_to'],
-				Item_id= rsltlst.loc[row_idx, 'item_id'],
-				Expense= rsltlst.loc[row_idx, 'expense'],
-				Quantity= rsltlst.loc[row_idx, 'quantity'],
-				Date= rsltlst.loc[row_idx, 'date']
+				Inv_item_id= rsltlst.loc[row_idx, 'inv_item_id'],
+				Inv_expense= rsltlst.loc[row_idx, 'inv_expense'],
+				Inv_quantity= rsltlst.loc[row_idx, 'inv_quantity'],
+				Inv_date= rsltlst.loc[row_idx, 'inv_date']
 				)
 		
-	pDataWareHouseModel = DataWareHouseModel.objects.all()
+	pInventoryModel = InventoryModel.objects.all()
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'pDataWareHouseModel': pDataWareHouseModel,}
+				'pInventoryModel': pInventoryModel,}
 	return render(request, 'index.html', context)
 
 def	insertInventoryToDB(request):
-	mainmenu = "backstage" ; submenu = "datawarehouse"
+	mainmenu = "backstage" ; submenu = "inventory"
 	pIn_out = "" ; pFrom_to = "" ; pItem_id = ""
 	pExpense = "" ; pQuantity = "" ; pDate = ""
-	datawarehouse = DataWareHouse()
+	inventory = Inventory()
 					
 	if request.method == 'GET':
 		form = insertInventoryToDBForm(request.GET)
 		if form.is_valid():
+			pInv_id = form.cleaned_data['pInv_id']
 			pIn_out = form.cleaned_data['pIn_out']
 			pFrom_to = form.cleaned_data['pFrom_to']
-			pItem_id = form.cleaned_data['pItem_id']
-			pExpense = form.cleaned_data['pExpense']
-			pQuantity = form.cleaned_data['pQuantity']
-			pDate = form.cleaned_data['pDate']
+			pInv_item_id = form.cleaned_data['pInv_item_id']
+			pInv_expense = form.cleaned_data['pInv_expense']
+			pInv_quantity = form.cleaned_data['pInv_quantity']
+			pInv_date = form.cleaned_data['pInv_date']
 			
-			datawarehouse.insertInventoryToDB(pIn_out, pFrom_to, pItem_id, pExpense, pQuantity, pDate)
+			maxInv_id = inventory.selectMaxInv_idFromDB()
+			if maxInv_id.loc[0,'MAX(inv_id)'] == None:
+				maxInv_id_p_1=0
+			else:
+				maxInv_id_p_1 = maxInv_id.loc[0,'MAX(inv_id)']
+			maxInv_id_p_1 = int(maxInv_id_p_1) + 1
+			inventory.insertInventoryToDB(maxInv_id_p_1, pIn_out, pFrom_to, pInv_item_id, pInv_expense, pInv_quantity, pInv_date)
 
 	elif request.method == 'POST':
 		pass
 	else:
 		pass
-	rsltlst = datawarehouse.selectInventoryFromDB()
+	rsltlst = inventory.selectInventoryFromDB()
 	
-	DataWareHouseModel.objects.all().delete()
-	if DataWareHouseModel.objects.count() == 0:
+	InventoryModel.objects.all().delete()
+	if InventoryModel.objects.count() == 0:
 		for row_idx in range(rsltlst.shape[0]):
-			DataWareHouseModel.objects.create(
+			InventoryModel.objects.create(
+				Inv_id= rsltlst.loc[row_idx, 'inv_id'],
 				In_out= rsltlst.loc[row_idx, 'in_out'],
 				From_to= rsltlst.loc[row_idx, 'from_to'],
-				Item_id= rsltlst.loc[row_idx, 'item_id'],
-				Expense= rsltlst.loc[row_idx, 'expense'],
-				Quantity= rsltlst.loc[row_idx, 'quantity'],
-				Date= rsltlst.loc[row_idx, 'date']
+				Inv_item_id= rsltlst.loc[row_idx, 'inv_item_id'],
+				Inv_expense= rsltlst.loc[row_idx, 'inv_expense'],
+				Inv_quantity= rsltlst.loc[row_idx, 'inv_quantity'],
+				Inv_date= rsltlst.loc[row_idx, 'inv_date']
 				)
 		
-	pDataWareHouseModel = DataWareHouseModel.objects.all()
+	pInventoryModel = InventoryModel.objects.all()
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pIn_out':pIn_out,'pFrom_to':pFrom_to,'pItem_id':pItem_id,
 				'pExpense':pExpense,'pQuantity':pQuantity,'pDate':pDate,
-				'pDataWareHouseModel': pDataWareHouseModel}
+				'pInventoryModel': pInventoryModel}
 	return render(request, 'index.html', context)
 
 
 def	item(request):
 	mainmenu = "backstage" ; submenu = "item"
+	
+	itemcategory = Itemcategory()
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
+	
 	
 	item = Item()
 	rsltlst = item.selectItemFromDB()
@@ -89,19 +117,20 @@ def	item(request):
 				Cur_price= rsltlst.loc[row_idx, 'cur_price'],
 				Cur_quantity= rsltlst.loc[row_idx, 'cur_quantity'],
 				Cur_place= rsltlst.loc[row_idx, 'cur_place'],
-				Item_date= rsltlst.loc[row_idx, 'item_date']
+				Item_date= rsltlst.loc[row_idx, 'item_date'],
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id']
 				)
 		
 	pItemModel = ItemModel.objects.all()
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
-				'pItemModel': pItemModel,}
+				'pItemModel': pItemModel,'pItemcategoryModel':pItemcategoryModel,}
 	return render(request, 'index.html', context)
 
 def	insertItemToDB(request):
 	mainmenu = "backstage" ; submenu = "item"
 	pItem_id = "" ; pItem_name = "" ; pBarcode = ""
-	pCur_price = "" ; pCur_quantity = "" ; pCur_place = "" ; pItem_date = ""
+	pCur_price = "" ; pCur_quantity = "" ; pCur_place = "" ; pItem_date = "" ; pItemcategory_id = ""
 	item = Item()
 					
 	if request.method == 'GET':
@@ -113,11 +142,16 @@ def	insertItemToDB(request):
 			pCur_price = form.cleaned_data['pCur_price']
 			pCur_quantity = form.cleaned_data['pCur_quantity']
 			pCur_place = form.cleaned_data['pCur_place']
-			pItem_date = form.cleaned_data['pItem_date']
+			pItem_date = form.cleaned_data['pItem_date'],
+			pItemcategory_id = form.cleaned_data['pItemcategory_id']
 			
 			maxItem_id = item.selectMaxItem_idFromDB()
-			maxItem_id_p_1 = int(maxItem_id.loc[0,'MAX(item_id)']) + 1
-			item.insertItemToDB(maxItem_id_p_1, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date)
+			if maxItem_id.loc[0,'MAX(item_id)'] == None:
+				maxItem_id_p_1 = 0;
+			else:
+				maxItem_id_p_1 = maxItem_id.loc[0,'MAX(item_id)']
+			maxItem_id_p_1 = int(maxItem_id_p_1) + 1
+			item.insertItemToDB(maxItem_id_p_1, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date, pItemcategory_id)
 
 	elif request.method == 'POST':
 		pass
@@ -135,22 +169,40 @@ def	insertItemToDB(request):
 				Cur_price= rsltlst.loc[row_idx, 'cur_price'],
 				Cur_quantity= rsltlst.loc[row_idx, 'cur_quantity'],
 				Cur_place= rsltlst.loc[row_idx, 'cur_place'],
-				Item_date= rsltlst.loc[row_idx, 'item_date']
+				Item_date= rsltlst.loc[row_idx, 'item_date'],
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id']
 				)
 		
 	pItemModel = ItemModel.objects.all()
 	
+	
+	itemcategory = Itemcategory()
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
+	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItem_id':pItem_id,'pItem_name':pItem_name,'pBarcode':pBarcode,
-				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,
-				'pItemModel': pItemModel}
+				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,'pItemcategory_id':pItemcategory_id,
+				'pItemModel': pItemModel, 'pItemcategoryModel':pItemcategoryModel,}
 	return render(request, 'index.html', context)
 
 
 def	updateItemToDB(request):
 	mainmenu = "backstage" ; submenu = "item"
 	pItem_id = "" ; pItem_name = "" ; pBarcode = ""
-	pCur_price = "" ; pCur_quantity = "" ; pCur_place = "" ; pItem_date = ""
+	pCur_price = "" ; pCur_quantity = "" ; pCur_place = "" ; pItem_date = ""; pItemcategory_id = "" 
 	item = Item()
 					
 	if request.method == 'GET':
@@ -163,7 +215,8 @@ def	updateItemToDB(request):
 		pCur_quantity = request.POST.get('pCur_quantity')
 		pCur_place = request.POST.get('pCur_place')
 		pItem_date = request.POST.get('pItem_date')
-		item.updateItemToDB(pItem_id, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date)
+		pItemcategory_id = request.POST.get('pItemcategory_id')
+		item.updateItemToDB(pItem_id, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date,pItemcategory_id)
 		pass
 	else:
 		pass
@@ -179,22 +232,38 @@ def	updateItemToDB(request):
 				Cur_price= rsltlst.loc[row_idx, 'cur_price'],
 				Cur_quantity= rsltlst.loc[row_idx, 'cur_quantity'],
 				Cur_place= rsltlst.loc[row_idx, 'cur_place'],
-				Item_date= rsltlst.loc[row_idx, 'item_date']
+				Item_date= rsltlst.loc[row_idx, 'item_date'],
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id']
 				)
 		
 	pItemModel = ItemModel.objects.all()
 	
+	itemcategory = Itemcategory()
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItem_id':pItem_id,'pItem_name':pItem_name,'pBarcode':pBarcode,
-				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,
-				'pItemModel': pItemModel}
+				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,'pItemcategory_id':pItemcategory_id,
+				'pItemModel': pItemModel,'pItemcategoryModel':pItemcategoryModel}
 	return render(request, 'index.html', context)
 
 
 def	deleteItemToDB(request):
 	mainmenu = "backstage" ; submenu = "item"
 	pItem_id = "" ; pItem_name = "" ; pBarcode = ""
-	pCur_price = "" ; pCur_quantity = "" ; pCur_place = "" ; pItem_date = ""
+	pCur_price = "" ; pCur_quantity = "" ; pCur_place = "" ; pItem_date = "" ; pItemcategory_id = ""
 	item = Item()
 					
 	if request.method == 'GET':
@@ -218,15 +287,32 @@ def	deleteItemToDB(request):
 				Cur_price= rsltlst.loc[row_idx, 'cur_price'],
 				Cur_quantity= rsltlst.loc[row_idx, 'cur_quantity'],
 				Cur_place= rsltlst.loc[row_idx, 'cur_place'],
-				Item_date= rsltlst.loc[row_idx, 'item_date']
+				Item_date= rsltlst.loc[row_idx, 'item_date'],
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
 				)
 		
 	pItemModel = ItemModel.objects.all()
 	
+	itemcategory = Itemcategory()
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
+	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItem_id':pItem_id,'pItem_name':pItem_name,'pBarcode':pBarcode,
-				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,
-				'pItemModel': pItemModel}
+				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,'pItemcategory_id':pItemcategory_id,
+				'pItemModel': pItemModel,'pItemcategoryModel':pItemcategoryModel,}
 	return render(request, 'index.html', context)
 
 
@@ -270,7 +356,11 @@ def	insertTransactionToDB(request):
 		pTr_Date = request.POST.get('pTr_Date')
 		
 		maxTransaction_id = transaction.selectMaxTransaction_idFromDB()
-		maxTransaction_id_p_1 = int(maxTransaction_id.loc[0,'MAX(tr_id)']) + 1
+		if maxTransaction_id.loc[0,'MAX(tr_id)'] == None:
+			maxTransaction_id_p_1 = 0
+		else:
+			maxTransaction_id_p_1 = maxTransaction_id.loc[0,'MAX(tr_id)']
+		maxTransaction_id_p_1 = int(maxTransaction_id_p_1) + 1
 		print(maxTransaction_id_p_1)
 		for idx in range(len(pItem_idlist)):
 			if(pItem_idlist[idx] != ""):
@@ -298,6 +388,147 @@ def	insertTransactionToDB(request):
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pTransactionModel': pTransactionModel}
 	return render(request, 'index.html', context)
+
+
+
+
+
+
+def	itemcategory(request):
+	mainmenu = "backstage" ; submenu = "itemcategory"
+	
+	itemcategory = Itemcategory()
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
+	context	= {'mainmenu': mainmenu, 'submenu': submenu,
+				'pItemcategoryModel': pItemcategoryModel,}
+	return render(request, 'index.html', context)
+
+def	insertItemcategoryToDB(request):
+	mainmenu = "backstage" ; submenu = "itemcategory"
+	pItemcategory_id = "" ; pItemcategory_name = "" ; pItemcategory_content = ""; pItemcategory_date = ""
+	itemcategory = Itemcategory()
+					
+	if request.method == 'GET':
+		pass	
+	elif request.method == 'POST':
+		pItemcategory_id = request.POST.get('pItemcategory_id')
+		pItemcategory_name = request.POST.get('pItemcategory_name')
+		pItemcategory_content = request.POST.get('pItemcategory_content')
+		pItemcategory_date = request.POST.get('pItemcategory_date')
+		
+		maxItemcategory_id = itemcategory.selectMaxItemcategory_idFromDB()
+		if maxItemcategory_id.loc[0,'max_itemcategory_id'] == None:
+			maxItemcategory_id_p_1 = 0;
+		else:
+			maxItemcategory_id_p_1 = maxItemcategory_id.loc[0,'max_itemcategory_id']
+		maxItemcategory_id_p_1 = int(maxItemcategory_id_p_1) + 1
+		itemcategory.insertItemcategoryToDB(maxItemcategory_id_p_1, pItemcategory_name, pItemcategory_content, pItemcategory_date)
+		pass
+	else:
+		pass
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+	
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
+	context	= {'mainmenu': mainmenu, 'submenu': submenu,
+				'pItemcategory_id':pItemcategory_id,'pItemcategory_name':pItemcategory_name,'pItemcategory_content':pItemcategory_content,'pItemcategory_date':pItemcategory_date,
+				'pItemcategoryModel': pItemcategoryModel}
+	return render(request, 'index.html', context)
+
+
+def	updateItemcategoryToDB(request):
+	mainmenu = "backstage" ; submenu = "itemcategory"
+	pItemcategory_id = "" ; pItemcategory_name = "" ; pItemcategory_content = "" ; pItemcategory_date = ""
+	itemcategory = Itemcategory()
+					
+	if request.method == 'GET':
+		pass
+	elif request.method == 'POST':
+		pItemcategory_id = request.POST.get('pItemcategory_id')
+		pItemcategory_name = request.POST.get('pItemcategory_name')
+		pItemcategory_content = request.POST.get('pItemcategory_content')
+		pItemcategory_date = request.POST.get('pItemcategory_date')
+		itemcategory.updateItemcategoryToDB(pItemcategory_id, pItemcategory_name, pItemcategory_content, pItemcategory_date)
+		pass
+	else:
+		pass
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+	
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
+	context	= {'mainmenu': mainmenu, 'submenu': submenu,
+				'pItemcategory_id':pItemcategory_id,'pItemcategory_name':pItemcategory_name,'pItemcategory_content':pItemcategory_content, 'pItemcategory_date':pItemcategory_date,
+				'pItemcategoryModel': pItemcategoryModel}
+	return render(request, 'index.html', context)
+
+
+def	deleteItemcategoryToDB(request):
+	mainmenu = "backstage" ; submenu = "itemcategory"
+	pItemcategory_id = "" ; pItemcategory_name = "" ; pItemcategory_content = "" ; pItemcategory_date = ""
+	itemcategory = Itemcategory()
+					
+	if request.method == 'GET':
+		pass
+	elif request.method == 'POST':
+		pItemcategory_id = request.POST.get('pItemcategory_id')
+		itemcategory.deleteItemcategoryToDB(pItemcategory_id)
+		pass
+	else:
+		pass
+	
+	rsltlst = itemcategory.selectItemcategoryFromDB()
+	
+	ItemcategoryModel.objects.all().delete()
+	if ItemcategoryModel.objects.count() == 0:
+		for row_idx in range(rsltlst.shape[0]):
+			ItemcategoryModel.objects.create(
+				Itemcategory_id= rsltlst.loc[row_idx, 'itemcategory_id'],
+				Itemcategory_name= rsltlst.loc[row_idx, 'itemcategory_name'],
+				Itemcategory_content= rsltlst.loc[row_idx, 'itemcategory_content'],
+				Itemcategory_date= rsltlst.loc[row_idx, 'itemcategory_date']
+				)
+		
+	pItemcategoryModel = ItemcategoryModel.objects.all()
+	
+	context	= {'mainmenu': mainmenu, 'submenu': submenu,
+				'pItemcategory_id':pItemcategory_id,'pItemcategory_name':pItemcategory_name,'pItemcategory_content':pItemcategory_content, 'pItemcategory_date':pItemcategory_date,
+				'pItemcategoryModel': pItemcategoryModel}
+	return render(request, 'index.html', context)
+
+
 
 
 

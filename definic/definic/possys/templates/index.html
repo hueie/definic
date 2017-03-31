@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>DEFINIC</title>
+    <title>POS SYSTEM</title>
 
 	
     <!-- Bootstrap Core CSS -->
@@ -31,7 +31,7 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/possys/">Definic</a>
+                <a class="navbar-brand" href="/possys/">POS SYSTEM</a>
                 <a id="leftbarfadein" style="display:inline;"class="navbar-brand" href="javascript:leftbarfadein();"><i class="fa fa-bars"></i></a>
             </div>
             {% include "navbar_top.html" %}
@@ -42,13 +42,15 @@
         </nav>
         <div id="page-wrapper" class="page-leftbar-fadeout">
         	{% if submenu == "index" %}
-	        	Index
-        	{% elif submenu == "datawarehouse" %}
-				{% include "backstage/datawarehouse.html" %}
+	        	{% include "possys/index.html" %}
+        	{% elif submenu == "inventory" %}
+				{% include "backstage/inventory.html" %}
 			{% elif submenu == "transaction" %}
 				{% include "backstage/transaction.html" %}	
 			{% elif submenu == "item" %}
-				{% include "backstage/item.html" %}		
+				{% include "backstage/item.html" %}	
+			{% elif submenu == "itemcategory" %}
+				{% include "backstage/itemcategory.html" %}		
         	{% else %}
 	        	No Pages
         	{% endif %}

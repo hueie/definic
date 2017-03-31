@@ -21,7 +21,13 @@
 			<input type="text" name="pCur_quantity" value="{{ pCur_quantity }}" >
 			<span>pCur_place : </span>
 			<input type="text" name="pCur_place" value="{{ pCur_place }}" >
-			<!-- <span>pItem_date : </span> -->
+			<span>pItemcategory_id : </span>
+			
+			<select name="pItemcategory_id" >
+				{% for row in pItemcategoryModel%}
+				<option value="{{row.Itemcategory_id}}">{{row.Itemcategory_name}}</option>
+				{% endfor %}
+			</select>
 			<input type="hidden" name="pItem_date" value="{{ pItem_date }}" >
 			<input type="submit"  value="submit">
 		</form>
@@ -35,6 +41,7 @@
 				<td style="width:10%">Cur_quantity</td>
 				<td style="width:10%">Cur_place</td>
 				<td style="width:10%">Item_date</td>
+				<td style="width:10%">Itemcategory_id</td>
 				<td style="width:10%">Modify </td>
 				<td style="width:10%">Delete </td>
 			</tr>
@@ -49,6 +56,7 @@
 				<td> <input type="text" name="pCur_quantity" value="{{ row.Cur_quantity }}"> </td>
 				<td> <input type="text" name="pCur_place" value="{{ row.Cur_place }}"> </td>
 				<td> <input type="text" name="pItem_date" value="{{ row.Item_date }}"> </td>
+				<td> <input type="text" name="pItemcategory_id" value="{{ row.Itemcategory_id }}"> </td>
 				<td><input type="submit" value="modify"> </td>
 				</form>
 				<form action="/possys/backstage/item/deleteItemToDB/" method="post" name="deleteItemToDBForm">

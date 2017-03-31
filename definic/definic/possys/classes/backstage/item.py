@@ -14,11 +14,19 @@ class Item:
 	def	__init__(self, pdata=None):
 		self.dbhandler = DBHandler()
 	
-	def selectItemFromDB(self, item_name=None):
+	def selectItemFromDB(self, itemcategory_id=None):
 		if(self.dbhandler.dbtype == "mysql"):
-			sql = "SELECT item_id, item_name, barcode, cur_price, cur_quantity, cur_place, item_date FROM possys_item"
+			sql = "SELECT item_id, item_name, barcode, cur_price, cur_quantity, cur_place, item_date, itemcategory_id FROM possys_item "
+			if itemcategory_id != None:
+				sql += " WHERE itemcategory_id = %s" % (itemcategory_id)
+			else:
+				pass
 		elif(self.dbhandler.dbtype == "sqlite3"):
-			sql = "SELECT item_id, item_name, barcode, cur_price, cur_quantity, cur_place, item_date FROM possys_item"
+			sql = "SELECT item_id, item_name, barcode, cur_price, cur_quantity, cur_place, item_date, itemcategory_id FROM possys_item "
+			if itemcategory_id != None:
+				sql += " WHERE itemcategory_id = %s" % (itemcategory_id)
+			else:
+				pass
 		else:
 			pass
 		return pd.read_sql(sql, self.dbhandler.conn)
@@ -32,10 +40,10 @@ class Item:
 			pass
 		return pd.read_sql(sql, self.dbhandler.conn)
 
-	def insertItemToDB(self, pItem_id, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date):
+	def insertItemToDB(self, pItem_id, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date, pItemcategory_id):
 		commonutil = CommonUtil() 
 		if(self.dbhandler.dbtype == "mysql"):
-			sql = "INSERT INTO possys_item('item_id','item_name','barcode','cur_price','cur_quantity','cur_place','item_date') "
+			sql = "INSERT INTO possys_item(item_id,item_name,barcode,cur_price,cur_quantity,cur_place,item_date,itemcategory_id) "
 			sql += " VALUES ( "
 			sql += "'%s'" %  (pItem_id)
 			sql += ",'%s'" % (pItem_name)
@@ -44,9 +52,10 @@ class Item:
 			sql += ",%s" % (pCur_quantity)
 			sql += ",'%s'" % (pCur_place)
 			sql += ",'%s %s'" %( commonutil.getDate() , commonutil.getTime() )
+			sql += ",'%s'" % (pItemcategory_id)
 			sql += " )"
 		elif(self.dbhandler.dbtype == "sqlite3"):
-			sql = "INSERT INTO possys_item(item_id,item_name,barcode,cur_price,cur_quantity,cur_place,item_date) "
+			sql = "INSERT INTO possys_item(item_id,item_name,barcode,cur_price,cur_quantity,cur_place,item_date,itemcategory_id) "
 			sql += " VALUES ( "
 			sql += "'%s'" %  (pItem_id)
 			sql += ",'%s'" % (pItem_name)
@@ -55,6 +64,7 @@ class Item:
 			sql += ",%s" % (pCur_quantity)
 			sql += ",'%s'" % (pCur_place)
 			sql += ",'%s %s'" %( commonutil.getDate() , commonutil.getTime() )
+			sql += ",'%s'" % (pItemcategory_id)
 			sql += " )"
 		else:
 			pass
@@ -63,7 +73,7 @@ class Item:
 		self.dbhandler.execSql(sql)
 		pass
 	
-	def updateItemToDB(self, pItem_id, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date):
+	def updateItemToDB(self, pItem_id, pItem_name, pBarcode, pCur_price, pCur_quantity, pCur_place, pItem_date, pItemcategory_id):
 		if(self.dbhandler.dbtype == "mysql"):
 			sql = "UPDATE possys_item SET "
 			sql += "  item_name = '%s'" % (pItem_name)
@@ -72,6 +82,7 @@ class Item:
 			sql += ", cur_quantity = %s" % (pCur_quantity)
 			sql += ", cur_place = '%s'" % (pCur_place)
 			sql += ", item_date = '%s'" %( pItem_date )
+			sql += ", itemcategory_id = '%s'" % (pItemcategory_id)
 			sql += "  WHERE item_id = '%s'" %  (pItem_id)
 		elif(self.dbhandler.dbtype == "sqlite3"):
 			sql = "UPDATE possys_item SET "
@@ -81,6 +92,7 @@ class Item:
 			sql += ", cur_quantity = %s" % (pCur_quantity)
 			sql += ", cur_place = '%s'" % (pCur_place)
 			sql += ", item_date = '%s'" % (pItem_date)
+			sql += ", itemcategory_id = '%s'" % (pItemcategory_id)
 			sql += "  WHERE item_id = '%s'" %  (pItem_id)
 		else:
 			pass

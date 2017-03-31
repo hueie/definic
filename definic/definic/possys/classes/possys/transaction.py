@@ -45,7 +45,7 @@ class Transaction:
 			sql += ",'%s %s'" %( commonutil.getDate() , commonutil.getTime() )
 			sql += " )"
 		elif(self.dbhandler.dbtype == "sqlite3"):
-			sql = "INSERT INTO possys_transaction(tr_id,pos_num,item_id,tr_price,tr_quantity,tr_date) "
+			sql = "INSERT INTO possys_transaction('tr_id','pos_num','item_id','tr_price','tr_quantity','tr_date') "
 			sql += " VALUES ( "
 			sql += "'%s'" %  (pTr_id)
 			sql += ",%s" % (pPos_num)

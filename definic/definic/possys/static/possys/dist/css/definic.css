@@ -14,8 +14,8 @@ textarea {
   color: black;
 }
 body {
-  color: white;
-  background-color: #778899;
+  color: black;
+  background-color: #F5FAFA;
 /* dimgray / dimgray	#696969	rgb(105,105,105 */
 }
 #wrapper {
@@ -24,7 +24,7 @@ body {
 #page-wrapper {
   padding: 0 15px;
   min-height: 568px;
-  background-color: #696969;
+  background-color: #FFF;
   /*navy	#000080	rgb(0,0,128)*/
 }
 
@@ -35,7 +35,7 @@ body {
   #page-wrapper {
     position: inherit;
     padding: 0 30px;
-    border-left: 1px solid #FAFAD2;
+    border-left: 1px solid #5E9DC8;
   }
   .page-leftbar-fadein{
     margin: 0 0 0 200px;
@@ -103,10 +103,10 @@ body {
   padding: 15px;
 }
 .sidebar ul li {
-  border-bottom: 1px solid #FAFAD2F;
+  border-bottom: 1px solid #5E9DC8;
 }
 .sidebar ul li a.active {
-  background-color: white;
+  background-color: #5E9DC8;
 }
 .sidebar .arrow {
   float: right;
@@ -137,4 +137,13 @@ body {
   .navbar-top-links .dropdown-back{
     margin-left: auto;
   }
+}
+
+
+.possys_item {
+	/*border: 1px solid #5E9DC8;   */
+	border-radius: 25px; 
+	padding: 5px; 
+	text-align:center;
+	height:100%;
 }

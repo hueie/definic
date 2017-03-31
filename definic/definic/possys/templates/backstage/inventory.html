@@ -1,0 +1,56 @@
+{% load staticfiles %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h3 class="page-header">{{ mainmenu }} > {{ submenu }}</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<form action="/possys/backstage/inventory/insertInventoryToDB/" method="get" name="insertInventoryToDBForm">
+			<input type="hidden" name="pInv_id" value="">
+			<span>In_out : </span>
+			IN
+			<input type="radio" name="pIn_out" value="1" {% if pIn_out == "1" or pIn_out == None %} checked="checked" {% endif %} >
+			 / OUT 
+			<input type="radio" name="pIn_out" value="2" {% if pIn_out == "2" %} checked="checked" {% endif %} >
+			<span> From / To : </span>
+			<input type="text" name="pFrom_to" value="{{ pFrom_to }}" >
+			<span>Inv_Item_id : </span>
+			<input type="text" name="pInv_item_id" value="{{ pInv_item_id }}" >
+			<span>Inv_expense : </span>
+			<input type="text" name="pInv_expense" value="{{ pInv_expense }}" >
+			<span>Inv_quantity : </span>
+			<input type="text" name="pInv_quantity" value="{{ pInv_quantity }}" >
+			<span>Inv_date : </span>
+			<input type="text" name="pInv_date" value="{{ pInv_date }}" >
+			<input type="submit"  value="submit">
+		</form>
+		<br>
+		<table style="width:100%;border:solid 1px white;" >
+			<tr>
+				<td style="width:10%">Inv_id</td>
+				<td style="width:10%">In_out</td>
+				<td style="width:10%">From_to</td>
+				<td style="width:10%">Inv_Item_id</td>
+				<td style="width:10%">Inv_Expense</td>
+				<td style="width:10%">Inv_Quantity</td>
+				<td style="width:10%">Inv_Date</td>
+			</tr>
+			{% for row in pInventoryModel %}
+			<tr>
+				<td> {{ row.Inv_id }} </td>
+				<td> {% if row.In_out == "1" %} in {% elif row.In_out == "2" %} out {% endif %}</td>
+				<td> {{ row.From_to }} </td>
+				<td> {{ row.Inv_item_id }} </td>
+				<td> {{ row.Inv_expense }} </td>
+				<td> {{ row.Inv_quantity }} </td>
+				<td> {{ row.Inv_date }} </td>
+			</tr>
+			{% endfor %}
+		</table>	
+			
+	</div>
+</div>
+
