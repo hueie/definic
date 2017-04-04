@@ -11,13 +11,17 @@ class Decisiontree:
         ent = 0.0
         totlen = len(x_train)
         x_cnts = Counter(x_train)
+        print("x_cnts" , x_cnts)
         for x_word, x_count in x_cnts.items():
             #print(x_word, x_count)
-            if y_train is None : #joint entropy
+            if y_train is None : #Shannon entropy
                 x_ratio = (x_count/totlen)
-                ent += -( x_ratio * np.log2( x_ratio ) )
+                eachent = -( x_ratio * np.log2( x_ratio ) )
+                print("\tEntropy(%s) : %s" % (x_word, eachent))
+                ent += eachent
+                pass
             
-            elif y_train is not None : #conditional entropy
+            elif y_train is not None : #Conditional entropy
                 x_ratio = (x_count/totlen)
                 subent = 0.0
 
@@ -32,9 +36,14 @@ class Decisiontree:
                         continue
                         
                     sub_ratio = (sublen/x_count)
-                    subent += -( sub_ratio*np.log2(sub_ratio) )
+                    eachent = -( sub_ratio*np.log2(sub_ratio) )
+                    print("\tEntropy(%s|%s) : %s" % (x_word, y_word, eachent))
+                    subent += eachent
                 
                 ent += x_ratio * subent
+                pass
+            else : #Joint Entropy
+                pass
                             
         return ent
     
@@ -57,17 +66,19 @@ class Id3(Decisiontree):
         #print(y_train)
 
         gain_d = self.entropy(y_train)
-        print("Gain_D : %s bits" % gain_d)
+        print("Whole Entropy (Gain_D) : %s bits" % gain_d)
         
         gain_df = pd.DataFrame()
+        gain_subdf = pd.DataFrame()
         for x_col in x_train:
-            print(x_col)
+            print("\nAttribute Name : %s" % x_col)
             gain_sub = self.entropy(x_train[x_col], y_train )
             gain_cond = gain_d - gain_sub
+            gain_subdf[x_col] = pd.Series(gain_sub)
             gain_df[x_col] = pd.Series(gain_cond)
         
-        print("Gain_Dataframe")
-        print(gain_df)
+        print("\nEach Entropy (Gain_SUB)")
+        print(gain_subdf)
         
         maxcolname = ''
         max = 0.0
@@ -76,10 +87,12 @@ class Id3(Decisiontree):
                 maxcolname = row
                 max = np.float(gain_df[row])
                 
-        print("max : %s" % max)
-        
         self.gaindf = gain_df
         self.treecond = {maxcolname : max}
+        print("\nWhole Entropy - Each Entropy")
+        print(id3.gaindf)
+        print("\nMax(Whole Entropy - Each Entropy) = %s : %s" % (maxcolname, max) )
+        
         return {maxcolname : max}
         
         '''
@@ -117,7 +130,7 @@ if __name__ == "__main__":
     y_train = train['buys_computer']
     id3 = Id3()
     id3.informationgain(x_train, y_train)
-    print(id3.gaindf)
+    
     print(id3.treecond)
     pass
 '''    
