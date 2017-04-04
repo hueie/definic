@@ -29,7 +29,7 @@ def	inventory(request):
 	pInventoryModel = InventoryModel.objects.all()
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pInventoryModel': pInventoryModel,}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 def	insertInventoryToDB(request):
 	mainmenu = "backstage" ; submenu = "inventory"
@@ -81,7 +81,7 @@ def	insertInventoryToDB(request):
 				'pIn_out':pIn_out,'pFrom_to':pFrom_to,'pItem_id':pItem_id,
 				'pExpense':pExpense,'pQuantity':pQuantity,'pDate':pDate,
 				'pInventoryModel': pInventoryModel}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 def	item(request):
@@ -125,7 +125,7 @@ def	item(request):
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItemModel': pItemModel,'pItemcategoryModel':pItemcategoryModel,}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 def	insertItemToDB(request):
 	mainmenu = "backstage" ; submenu = "item"
@@ -196,7 +196,7 @@ def	insertItemToDB(request):
 				'pItem_id':pItem_id,'pItem_name':pItem_name,'pBarcode':pBarcode,
 				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,'pItemcategory_id':pItemcategory_id,
 				'pItemModel': pItemModel, 'pItemcategoryModel':pItemcategoryModel,}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 def	updateItemToDB(request):
@@ -257,7 +257,7 @@ def	updateItemToDB(request):
 				'pItem_id':pItem_id,'pItem_name':pItem_name,'pBarcode':pBarcode,
 				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,'pItemcategory_id':pItemcategory_id,
 				'pItemModel': pItemModel,'pItemcategoryModel':pItemcategoryModel}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 def	deleteItemToDB(request):
@@ -313,7 +313,7 @@ def	deleteItemToDB(request):
 				'pItem_id':pItem_id,'pItem_name':pItem_name,'pBarcode':pBarcode,
 				'pCur_price':pCur_price,'pCur_quantity':pCur_quantity,'pCur_place':pCur_place,'pItem_date':pItem_date,'pItemcategory_id':pItemcategory_id,
 				'pItemModel': pItemModel,'pItemcategoryModel':pItemcategoryModel,}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 
@@ -339,7 +339,7 @@ def	transaction(request):
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pTransactionModel': pTransactionModel,}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 def	insertTransactionToDB(request):
 	mainmenu = "backstage" ; submenu = "transaction"
@@ -387,7 +387,7 @@ def	insertTransactionToDB(request):
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pTransactionModel': pTransactionModel}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 
@@ -414,7 +414,7 @@ def	itemcategory(request):
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItemcategoryModel': pItemcategoryModel,}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 def	insertItemcategoryToDB(request):
 	mainmenu = "backstage" ; submenu = "itemcategory"
@@ -456,7 +456,7 @@ def	insertItemcategoryToDB(request):
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItemcategory_id':pItemcategory_id,'pItemcategory_name':pItemcategory_name,'pItemcategory_content':pItemcategory_content,'pItemcategory_date':pItemcategory_date,
 				'pItemcategoryModel': pItemcategoryModel}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 def	updateItemcategoryToDB(request):
@@ -492,7 +492,7 @@ def	updateItemcategoryToDB(request):
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItemcategory_id':pItemcategory_id,'pItemcategory_name':pItemcategory_name,'pItemcategory_content':pItemcategory_content, 'pItemcategory_date':pItemcategory_date,
 				'pItemcategoryModel': pItemcategoryModel}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 def	deleteItemcategoryToDB(request):
@@ -526,7 +526,7 @@ def	deleteItemcategoryToDB(request):
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItemcategory_id':pItemcategory_id,'pItemcategory_name':pItemcategory_name,'pItemcategory_content':pItemcategory_content, 'pItemcategory_date':pItemcategory_date,
 				'pItemcategoryModel': pItemcategoryModel}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 

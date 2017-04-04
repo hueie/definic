@@ -14,8 +14,10 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
+PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print("BASE_DIR :" , BASE_DIR)
+print("PROJECT_PATH :" , PROJECT_PATH)
+print(os.path.join(PROJECT_PATH, 'invest', 'templates'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -32,9 +34,10 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
 	'chartit',
-	'possys.apps.PossysConfig',
+	'main.apps.MainConfig',
 	'invest.apps.InvestConfig',
-    'django.contrib.admin',
+    'possys.apps.PossysConfig',
+	'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -57,7 +60,10 @@ ROOT_URLCONF = 'definic.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+				#os.path.join(PROJECT_PATH, 'possys', 'templates'),
+				#os.path.join(PROJECT_PATH, 'invest', 'templates'),
+				],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

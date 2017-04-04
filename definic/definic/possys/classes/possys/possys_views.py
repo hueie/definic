@@ -56,7 +56,7 @@ def	index(request):
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,
 				'pItemCnt':pItemCnt, 'pItemcategoryCnt': pItemcategoryCnt,
 				'pItemModel': pItemModel,'pItemcategoryModel': pItemcategoryModel,}
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 def	selectItemcategory(request):

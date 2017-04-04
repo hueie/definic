@@ -14,7 +14,7 @@ def	index(request):
 				'maintitle': maintitle, 'subtitle': subtitle,}
 	
 	
-	return render(request, 'index.html', context)
+	return render(request, 'possys/index.html', context)
 
 
 
