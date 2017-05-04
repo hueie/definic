@@ -530,6 +530,29 @@ def	deleteItemcategoryToDB(request):
 
 
 
+def	posdatamart(request):
+	mainmenu = "backstage" ; submenu = "posdatamart"
+	
+	context	= {'mainmenu': mainmenu, 'submenu': submenu,}
+	return render(request, 'possys/index.html', context)
+
+
+def	uploadposdata(request):
+	mainmenu = "backstage" ; submenu = "posdatamart"
+	from django.core.files.storage import FileSystemStorage
+	
+	if request.method == 'POST' and request.FILES['myfile']:
+		myfile = request.FILES['myfile']
+		fs = FileSystemStorage()
+		filename = fs.save(myfile.name, myfile)
+		uploaded_file_url = fs.url(filename)
+		pass
+	
+	context	= {'mainmenu': mainmenu, 'submenu': submenu,
+				'uploaded_file_url': uploaded_file_url
+				}
+	return render(request, 'possys/index.html', context)
+
 
 
 '''

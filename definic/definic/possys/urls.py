@@ -23,6 +23,12 @@ urlpatterns	= [
 	url(r'^backstage/itemcategory/insertItemcategoryToDB/$', backstage_views.insertItemcategoryToDB,	name='possys_insertItemcategoryToDB'), 
 	url(r'^backstage/itemcategory/deleteItemcategoryToDB/$', backstage_views.deleteItemcategoryToDB,	name='possys_deleteItemcategoryToDB'), 
 	url(r'^backstage/itemcategory/updateItemcategoryToDB/$', backstage_views.updateItemcategoryToDB,	name='possys_updateItemcategoryToDB'), 
+
+
+	url(r'^backstage/posdatamart/$', backstage_views.posdatamart,	name='possys_posdatamart'), 
+	url(r'^backstage/posdatamart/uploadposdata/$', backstage_views.uploadposdata,	name='possys_uploadposdata'), 
+	
+	
 #	url(r'^middlestage/alphamodel/$', middlestage_views.alphamodel,	name='alphamodel'), 
 	
 #	url(r'^frontstage/portfoliobuilder/$', frontstage_views.portfoliobuilder,	name='portfoliobuilder'), 
