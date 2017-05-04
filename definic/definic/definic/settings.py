@@ -143,6 +143,8 @@ CACHES = {
     }
 }
 
+#http://stackoverflow.com/questions/5871730/need-a-minimal-django-file-upload-example
+#https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
