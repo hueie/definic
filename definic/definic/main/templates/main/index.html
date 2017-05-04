@@ -1,9 +1,7 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,9 +13,23 @@
 <body>
 	<div style="width:100%;">
 		<div style="text-align:center;">
-			<span>PROJECT</span><br>
+		    {% if request.session.user_id %}
+		    <span>{{ request.session.user_id }}</span>
+		    <span>PROJECT</span><br>
 		    <span>1. <a href="/invest/">INVEST</a></span><br>
 		    <span>2. <a href="/possys/">POSSYS</a></span><br>
+		    <form action="/logout/" method="post" name="logout" >
+			{% csrf_token %}
+			    <input type="submit" value="logout">
+		    </form>
+		    {% else %}
+		    <form action="/login/" method="post" name="login" >
+			{% csrf_token %}
+			    <span>ID : <input type="text" name="user_id"></span><br>
+			    <span>PW : <input type="text" name="user_pwd"></span><br>
+			    <input type="submit" value="login">
+		    </form>
+		    {% endif %}
 	    </div>
     </div>
 </body>
