@@ -6,7 +6,7 @@ class DBHandler():
     def __init__(self):
         try:
             self.dbtype = "mysql"
-            self.conn = mdb.connect('127.0.0.1', 'root', '1234', 'definic', port=3306, charset='utf8')
+            self.conn = mdb.connect('192.168.1.129', 'alpha', '1234', 'definic', port=3306, charset='utf8')
             self.conn.autocommit(False)
             self.initdb()
         except Exception as error:
@@ -19,6 +19,17 @@ class DBHandler():
                 
     def initdb(self):
         if(self.dbtype == "mysql"):
+            sql = "CREATE TABLE possys_item ( item_id VARCHAR(20), barcode INTEGER, item_name VARCHAR(20), cur_price INTEGER, cur_place VARCHAR(20), cur_quantity INTEGER, item_date VARCHAR(20), itemcategory_id INTEGER )"
+            self.execSql(sql)
+            sql = "CREATE TABLE possys_transaction ( tr_id VARCHAR(20), pos_num INTEGER, item_id VARCHAR(20), tr_price INTEGER, tr_quantity INTEGER, tr_date VARCHAR(20) )"
+            self.execSql(sql)
+            sql = "CREATE TABLE possys_bill ( tr_id VARCHAR(20), total_cost INTEGER , tax INTEGER , card INTEGER , bill_date VARCHAR(20) )"
+            self.execSql(sql)
+            sql = "CREATE TABLE possys_inventory ( inv_id INTEGER, in_out INTEGER , from_to VARCHAR(20), inv_item_id VARCHAR(20), inv_expense INTEGER , inv_quantity INTEGER , inv_date VARCHAR(20) )"
+            self.execSql(sql)
+            sql = "CREATE TABLE possys_itemcategory ( itemcategory_id INTEGER , itemcategory_name VARCHAR(20), itemcategory_content VARCHAR(20), itemcategory_date VARCHAR(20) )"
+            self.execSql(sql)
+     
             pass
         elif(self.dbtype == "sqlite3"):
             #sql = "DROP TABLE data_stock_usa" ; self.execSql(sql)

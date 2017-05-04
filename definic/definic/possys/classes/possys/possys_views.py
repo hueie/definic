@@ -18,8 +18,11 @@ def	index(request):
 	
 	itemcategory = Itemcategory()
 	rsltlst = itemcategory.selectItemcategoryFromDB()
-	if first_itemcategory_id == "":
-		first_itemcategory_id = rsltlst.loc[0, 'itemcategory_id'];
+	if rsltlst.empty:
+		pass
+	else:
+		if first_itemcategory_id == "":
+			first_itemcategory_id = rsltlst.loc[0, 'itemcategory_id'];
 	
 	ItemcategoryModel.objects.all().delete()
 	if ItemcategoryModel.objects.count() == 0:
@@ -35,7 +38,10 @@ def	index(request):
 	pItemcategoryModel = ItemcategoryModel.objects.all()
 	
 	item = Item()
-	rsltlst = item.selectItemFromDB(first_itemcategory_id)
+	if first_itemcategory_id == "":
+		pass
+	else:
+		rsltlst = item.selectItemFromDB(first_itemcategory_id)
 
 	ItemModel.objects.all().delete()
 	if ItemModel.objects.count() == 0:
