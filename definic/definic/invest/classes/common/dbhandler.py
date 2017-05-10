@@ -6,7 +6,7 @@ class DBHandler():
     def __init__(self):
         try:
             self.dbtype = "mysql"
-            self.conn = mdb.connect('127.0.0.1', 'root', '1234', 'definic', port=3306, charset='utf8')
+            self.conn = mdb.connect('192.168.1.202', 'alpha', '1234', 'definic', port=3306, charset='utf8')
             self.conn.autocommit(False)
             self.initdb()
         except Exception as error:

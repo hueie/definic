@@ -14,7 +14,7 @@
 	<div style="width:100%;">
 		<div style="text-align:center;">
 		    {% if request.session.user_id %}
-		    <span>{{ request.session.user_id }}</span>
+		    {{msg}} : {{ request.session.user_id }}<br>
 		    <span>PROJECT</span><br>
 		    <span>1. <a href="/invest/">INVEST</a></span><br>
 		    <span>2. <a href="/possys/">POSSYS</a></span><br>
@@ -23,6 +23,7 @@
 			    <input type="submit" value="logout">
 		    </form>
 		    {% else %}
+		    {{msg}}<br>
 		    <form action="/login/" method="post" name="login" >
 			{% csrf_token %}
 			    <span>ID : <input type="text" name="user_id"></span><br>

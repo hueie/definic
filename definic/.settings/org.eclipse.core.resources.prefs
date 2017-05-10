@@ -14,6 +14,7 @@ encoding//definic/invest/classes/statistics/lineargraph.py=utf-8
 encoding//definic/invest/migrations/0007_regressionmodel.py=utf-8
 encoding//definic/invest/migrations/0008_regressionmodel_predicted_data.py=utf-8
 encoding//definic/invest/migrations/0009_auto_20170130_2225.py=utf-8
+encoding//definic/main/classes/commonmain/dbhandler.py=utf-8
 encoding//definic/possys/classes/backstage/inventory.py=utf-8
 encoding//definic/possys/classes/backstage/item.py=utf-8
 encoding//definic/possys/classes/backstage/itemcategory.py=utf-8

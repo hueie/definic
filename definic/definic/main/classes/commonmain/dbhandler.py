@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 import MySQLdb as mdb
-import sqlite3 as sq3
-
+'''
+CREATE DATABASE definic;
+USE definic;
+CREATE USER 'alpha'@'%' IDENTIFIED BY '1234';
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'alpha'@'%';
+GRANT ALTER, CREATE,SELECT,INSERT,UPDATE,DELETE,LOCK TABLES,EXECUTE ON definic.* TO 'alpha'@'%';
+FLUSH PRIVILEGES;
+quit;
+'''
 class DBHandler():
     def __init__(self):
         try:
             self.dbtype = "mysql"
-            self.conn = mdb.connect('192.168.1.202', 'alpha', '1234', 'definic', port=3306, charset='utf8')
+            self.conn = mdb.connect(host="192.168.1.202", user="alpha", passwd="1234", db="definic", port=3306, charset="utf8")
             self.conn.autocommit(False)
-            self.initdb()
+            #self.initdb()
         except Exception as error:
             print(">>> Unexpected error in Connection to Mysql : ", error)
-            try:
-                self.dbtype = "sqlite3"
-                self.conn = sq3.connect("definic/possys.sqlite3") #, isolation_level=exclusive
-            except Exception as error:
-                print(">>> Unexpected error in Connection to Sqlite3 : ", error)
+            pass
                 
     def initdb(self):
         if(self.dbtype == "mysql"):
