@@ -3,6 +3,7 @@ from .inventory import Inventory
 from .transaction import Transaction
 from .item import Item
 from .itemcategory import Itemcategory
+from .posdatamart import Posdatamart
 from .backstage_forms import insertInventoryToDBForm, insertTransactionToDBForm, insertItemToDBForm
 from .backstage_models import InventoryModel, TransactionModel, ItemModel, ItemcategoryModel
 
@@ -543,9 +544,16 @@ def	uploadposdata(request):
 	
 	if request.method == 'POST' and request.FILES['myfile']:
 		myfile = request.FILES['myfile']
+		extension = myfile.name.split(".")[-1]
+		pPosdatamart_id = request.session['user_id']
+		posdatamart_atch_name = pPosdatamart_id+"."+extension 
+		
 		fs = FileSystemStorage()
-		filename = fs.save(myfile.name, myfile)
+		filename = fs.save(posdatamart_atch_name, myfile)
 		uploaded_file_url = fs.url(filename)
+		
+		posdatamart = Posdatamart()
+		posdatamart.insertPosdatamartToDB(pPosdatamart_id, posdatamart_atch_name)
 		pass
 	
 	context	= {'mainmenu': mainmenu, 'submenu': submenu,

@@ -18,6 +18,7 @@ encoding//definic/main/classes/commonmain/dbhandler.py=utf-8
 encoding//definic/possys/classes/backstage/inventory.py=utf-8
 encoding//definic/possys/classes/backstage/item.py=utf-8
 encoding//definic/possys/classes/backstage/itemcategory.py=utf-8
+encoding//definic/possys/classes/backstage/posdatamart.py=utf-8
 encoding//definic/possys/classes/backstage/transaction.py=utf-8
 encoding//definic/possys/classes/common/commonutil.py=utf-8
 encoding//definic/possys/classes/common/const.py=utf-8

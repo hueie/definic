@@ -19,6 +19,8 @@ class DBHandler():
                 
     def initdb(self):
         if(self.dbtype == "mysql"):
+            sql = "CREATE TABLE possys_posdatamart ( posdatamart_id VARCHAR(50), posdatamart_atch_name VARCHAR(60) )"
+            self.execSql(sql)
             
             sql = "CREATE TABLE possys_user ( user_id VARCHAR(20), user_pwd VARCHAR(20), user_date VARCHAR(20) )"
             self.execSql(sql)
